@@ -1,0 +1,12 @@
+{
+  "name": "ts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest --run",
+    "test-cov": "rm -rf coverage && vitest run --coverage",
+    "test-stg": "vitest related --run"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

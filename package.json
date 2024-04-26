@@ -1,13 +1,36 @@
 {
   "name": "ts-new",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "description": "A very opinionated cli tool for setting up a typescript project without frameworks/libs or using nest, vite, or next",
+  "author": "Mike Valeriano <mkvlrn@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkvlrn/ts-projects.git"
+  },
   "private": true,
+  "type": "module",
+  "bin": {
+    "mkvlrn-ts-new": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "package.json",
+    "readme.md"
+  ],
   "scripts": {
     "test": "vitest --run",
     "test-cov": "rm -rf coverage && vitest run --coverage",
     "test-stg": "vitest related --run",
-    "dev": "node --watch -r @swc-node/register src/index.ts",
-    "build": "rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths",
+    "dev": "node --import @swc-node/register/esm-register src/index.ts",
+    "build": "rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths && chmod +x dist/index.js",
     "start": "node dist",
     "prepare": "husky"
   },
@@ -37,5 +60,10 @@
     "tsc-files": "^1.1.4",
     "typescript": "^5.4.5",
     "vitest": "^1.5.2"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^5.0.1",
+    "chalk": "^5.3.0",
+    "ora": "^8.0.1"
   }
 }
