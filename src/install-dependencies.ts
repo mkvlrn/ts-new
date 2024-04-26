@@ -95,6 +95,7 @@ const dependencies: Record<ProjectType, { deps: string[]; devDeps: string[] }> =
       'eslint-config-airbnb-typescript',
       'eslint-config-prettier',
       'eslint-import-resolver-typescript',
+      'eslint-plugin-jsx-a11y',
       'eslint-plugin-import',
       'eslint-plugin-react',
       'eslint-plugin-react-hooks',
