@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/swcrc",
+  "module": {
+    "type": "commonjs",
+    "strict": true,
+    "strictMode": true
+  },
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "minify": {
+      "compress": false,
+      "mangle": false
+    },
+    "baseUrl": ".",
+    "paths": {
+      "#/*": ["./src/*"]
+    }
+  }
+}
