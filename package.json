@@ -7,7 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/mkvlrn/ts-projects.git"
   },
-  "private": true,
   "type": "module",
   "bin": {
     "mkvlrn-ts-new": "dist/index.js"
@@ -29,7 +28,7 @@
     "test": "vitest --run",
     "test-cov": "rm -rf coverage && vitest run --coverage",
     "test-stg": "vitest related --run",
-    "dev": "node --import @swc-node/register/esm-register src/index.ts",
+    "dev": "node --watch --import @swc-node/register/esm-register src/index.ts",
     "build": "rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths && chmod +x dist/index.js",
     "start": "node dist",
     "prepare": "husky"
