@@ -11,7 +11,7 @@
   "editor.rulers": [100],
   "editor.wordWrapColumn": 100,
   "editor.wordWrap": "wordWrapColumn",
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.validate": ["typescript", "typescriptreact"],
   "prettier.configPath": "./.prettierrc.json",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifierEnding": "js",

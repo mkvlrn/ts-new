@@ -1,7 +1,7 @@
 import path from 'node:path';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig as baseDefineConfig } from 'vite';
-import { defineConfig as testDefineConfig, mergeConfig } from 'vitest/dist/config.js';
+import { mergeConfig, defineConfig as testDefineConfig } from 'vitest/dist/config.js';
 
 const baseConfig = baseDefineConfig({
   plugins: [react()],
@@ -22,6 +22,7 @@ const baseConfig = baseDefineConfig({
 const testConfig = testDefineConfig({
   test: {
     alias: { '#': path.resolve('.', './src') },
+    include: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
     coverage: {
       reportsDirectory: 'coverage',
       reporter: ['lcov', 'html', 'text'],

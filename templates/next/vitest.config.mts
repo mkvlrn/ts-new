@@ -6,6 +6,7 @@ export default defineConfig({
     alias: { '#': path.resolve('.', 'src') },
   },
   test: {
+    include: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
     coverage: {
       reportsDirectory: 'coverage',
       reporter: ['lcov', 'html', 'text'],
