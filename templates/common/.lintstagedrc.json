@@ -1,4 +1,4 @@
 {
-  "*.(ts|tsx)": ["tsc-files", "eslint --fix", "prettier --write", "vitest related --run"],
-  "*.(json)": ["prettier --write"]
+  "*.(ts|tsx)": ["eslint --fix", "prettier --write", "vitest related --run"],
+  "*.(json|css|html)": ["prettier --write"]
 }

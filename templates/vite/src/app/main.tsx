@@ -1,6 +1,6 @@
-import { Logo } from '#/components/logo.jsx';
-import { Tagline } from '#/components/tagline.jsx';
-import { Title } from '#/components/title.jsx';
+import { Logo } from '#/components/logo';
+import { Tagline } from '#/components/tagline';
+import { Title } from '#/components/title';
 
 export function App() {
   return (
