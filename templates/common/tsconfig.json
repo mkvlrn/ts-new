@@ -20,7 +20,7 @@
     "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "esnext"
   },
 
   "exclude": ["node_modules"],

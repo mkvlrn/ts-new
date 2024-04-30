@@ -28,6 +28,7 @@ const dependencies: Record<ProjectType, { deps: string[]; devDeps: string[] }> =
       'lint-staged',
       'prettier',
       'typescript',
+      'unplugin-swc',
       'vitest',
     ],
     deps: [],
@@ -62,6 +63,7 @@ const dependencies: Record<ProjectType, { deps: string[]; devDeps: string[] }> =
       'lint-staged',
       'prettier',
       'typescript',
+      'unplugin-swc',
       'vitest',
     ],
     deps: [
