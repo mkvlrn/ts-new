@@ -162,7 +162,7 @@ export async function installDependencies(
   const spinner = ora(`Installing dependencies with ${packageManager}...`).start();
 
   await exec(`git init`, { stdio: 'ignore', cwd: projectDirectory });
-  await exec(`${packageManager} add ${dependencies[projectType].devDeps.join(' ')}`, {
+  await exec(`${packageManager} add ${dependencies[projectType].devDeps.join(' ')} -D`, {
     stdio: 'ignore',
     cwd: projectDirectory,
   });
