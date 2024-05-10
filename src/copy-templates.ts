@@ -54,14 +54,14 @@ async function adjustPackageJson(projectType: ProjectType, projectDirectory: str
   switch (projectType) {
     case 'node': {
       commands.push(
-        'npm pkg set scripts.dev="node --watch -r @swc-node/register src/index.ts"',
+        'npm pkg set scripts.dev="node -r @swc-node/register --watch src/index.ts"',
         'npm pkg set scripts.build="rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths"',
       );
       break;
     }
     case 'nest': {
       commands.push(
-        'npm pkg set scripts.dev="node --watch -r @swc-node/register src/main.ts"',
+        'npm pkg set scripts.dev="node -r @swc-node/register --watch src/main.ts"',
         'npm pkg set scripts.build="rm -rf dist && nest build"',
         'npm pkg set scripts.start="node dist/main"',
       );
