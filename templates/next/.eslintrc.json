@@ -49,6 +49,9 @@
     "unicorn/consistent-function-scoping": ["error", { "checkArrowFunctions": false }],
     "unicorn/no-null": "off",
     "unicorn/prefer-top-level-await": "off",
-    "unicorn/prevent-abbreviations": ["error", { "allowList": { "ProcessEnv": true } }]
+    "unicorn/prevent-abbreviations": [
+      "error",
+      { "allowList": { "ProcessEnv": true }, "ignore": ["next-env"] }
+    ]
   }
 }
