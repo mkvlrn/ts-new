@@ -50,7 +50,10 @@ async function copyDirectory(
 }
 
 async function adjustPackageJson(projectType: ProjectType, projectDirectory: string) {
-  const commands: string[] = ['npm pkg set scripts.prepare="husky"'];
+  const commands: string[] = [
+    `npm pkg set name=${projectDirectory}`,
+    'npm pkg set scripts.prepare="husky"',
+  ];
   switch (projectType) {
     case 'node': {
       commands.push(
