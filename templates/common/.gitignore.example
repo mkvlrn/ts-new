@@ -1,18 +1,18 @@
 # output
-/.next
-/build
-/dist
-/out
+.next
+build
+dist
+out
 
 # dependencies
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.js
 .yarn/install-state.gz
 
 # tests
-/.nyc_output
-/coverage
+.nyc_output
+coverage
 
 # environment variables
 .env
@@ -31,18 +31,18 @@ yarn-error.log*
 lerna-debug.log*
 
 # temp directory
-/.temp
-/.tmp
-/temp
-/tmp
+.temp
+.tmp
+temp
+tmp
 
 # ides & editors
-/.idea
+.idea
 .project
 .classpath
-.c9/
+.c9
 *.launch
-.settings/
+.settings
 *.sublime-workspace
 
 # typescript
