@@ -1,19 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-
-/* eslint-disable import/no-extraneous-dependencies */
-
-/**
- * the eslint rules disable at the top are necessary
- * while flat config support is being worked out
- * because most of the packages are not typed
- * and since this configuration is strict with type checking
- * these imports "should" fail the eslint-plugin-import check
- */
-// TODO - revisit these rules
 // @ts-check
 import eslint from '@eslint/js';
 import configPrettier from 'eslint-config-prettier';

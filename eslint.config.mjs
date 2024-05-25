@@ -1,13 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
-/**
- * the eslint rules disable at the top are necessary
- * while flat config support is being worked out
- * because most of the packages are not typed
- * and since this configuration is strict with type checking
- * these imports "should" fail the eslint-plugin-import check
- */
-// TODO - revisit these rules
 // @ts-check
 import eslint from '@eslint/js';
 // import pluginNext from '@next/eslint-plugin-next';

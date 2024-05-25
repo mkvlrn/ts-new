@@ -71,6 +71,7 @@ async function adjustPackageJson(
       commands.push(
         'npm pkg set scripts.dev="node -r @swc-node/register --watch src/index.ts"',
         'npm pkg set scripts.build="rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths"',
+        'npm pkg set type="module"',
       );
       break;
     }

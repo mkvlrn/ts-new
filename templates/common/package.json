@@ -2,6 +2,7 @@
   "name": "ts",
   "version": "1.0.0",
   "private": true,
+  "type": "commonjs",
   "scripts": {
     "test": "vitest --run",
     "test:cov": "rm -rf coverage && vitest run --coverage"
