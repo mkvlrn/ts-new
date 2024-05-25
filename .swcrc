@@ -6,6 +6,9 @@
     "strictMode": true
   },
   "jsc": {
+    "experimental": {
+      "keepImportAssertions": true
+    },
     "target": "esnext",
     "parser": {
       "syntax": "typescript",

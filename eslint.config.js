@@ -30,6 +30,8 @@ export default eslintTypescript.config(
     rules: {
       // recommends explicit return types on functions
       '@typescript-eslint/explicit-function-return-type': 'warn',
+      // reminds you to remove scattered console statements
+      'no-console': 'warn',
     },
   },
 
@@ -67,6 +69,7 @@ export default eslintTypescript.config(
 
   // eslint-plugin-react, eslint-plugin-react-hooks, @next/eslint-plugin-next
   // {
+  //   files: ['*.jsx', '*.tsx'],
   //   plugins: {
   //     react: pluginReact,
   //     'react-hooks': pluginReactHooks,
@@ -77,6 +80,7 @@ export default eslintTypescript.config(
   //     ...pluginReact.configs['jsx-runtime'].rules,
   //     ...pluginReactHooks.configs.recommended.rules,
   //     ...pluginNext.configs['core-web-vitals'].rules,
+  //     '@typescript-eslint/explicit-function-return-type': 'off',
   //   },
   // },
 

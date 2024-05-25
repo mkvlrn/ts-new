@@ -1,0 +1,85 @@
+{
+  "common": {
+    "dev": [
+      "@commitlint/cli",
+      "@commitlint/config-conventional",
+      "@eslint/js",
+      "@trivago/prettier-plugin-sort-imports",
+      "@types/node",
+      "@vitest/coverage-v8",
+      "eslint-config-prettier",
+      "eslint-import-resolver-typescript",
+      "eslint-plugin-import",
+      "eslint-plugin-unicorn",
+      "eslint-plugin-vitest",
+      "eslint",
+      "husky",
+      "lint-staged",
+      "prettier",
+      "typescript-eslint",
+      "typescript",
+      "unplugin-swc",
+      "vitest"
+    ]
+  },
+  "node": {
+    "dev": ["@swc-node/register", "@swc/cli", "@swc/core", "@swc/types", "@types/node"],
+    "prod": []
+  },
+  "nest": {
+    "dev": [
+      "@nestjs/cli",
+      "@nestjs/schematics",
+      "@nestjs/testing",
+      "@swc-node/register",
+      "@swc/cli",
+      "@swc/core",
+      "@swc/types",
+      "@types/express",
+      "unplugin-swc"
+    ],
+    "prod": [
+      "@nestjs/common",
+      "@nestjs/core",
+      "@nestjs/platform-express",
+      "reflect-metadata",
+      "rxjs"
+    ]
+  },
+  "vite": {
+    "dev": [
+      "@testing-library/dom",
+      "@testing-library/jest-dom",
+      "@testing-library/react",
+      "@types/react",
+      "@types/react-dom",
+      "@vitejs/plugin-react-swc",
+      "autoprefixer",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react",
+      "jsdom",
+      "postcss",
+      "tailwindcss",
+      "ts-node",
+      "vite"
+    ],
+    "prod": ["react", "react-dom"]
+  },
+  "next": {
+    "dev": [
+      "@next/eslint-plugin-next",
+      "@testing-library/dom",
+      "@testing-library/jest-dom",
+      "@testing-library/react",
+      "@types/react",
+      "@types/react-dom",
+      "autoprefixer",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react",
+      "jsdom",
+      "postcss",
+      "tailwindcss"
+    ],
+    "prod": ["next", "react", "react-dom"]
+  }
+}

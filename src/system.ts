@@ -25,11 +25,13 @@ export async function showLogo(): Promise<void> {
 
   const thisProject = chalk.cyanBright.bold('@mkvlrn/ts-new');
   const version = chalk.greenBright.bold(packageJsonContents.version);
+  // eslint-disable-next-line no-console
   console.info(`🤖 ${thisProject} v${version}`);
 }
 
 export function sayGoodbye(projectName: string): void {
   const projectDirectory = chalk.yellowBright(path.resolve(process.cwd(), projectName));
+  // eslint-disable-next-line no-console
   console.info(chalk.cyanBright(`🚀 Your project is ready at ${projectDirectory}`));
 }
 
@@ -63,6 +65,7 @@ export async function errorHandler(main: () => Promise<void>): Promise<void> {
     await main();
   } catch (error) {
     const preMessage = chalk.redBright('An error occurred:');
+    // eslint-disable-next-line no-console
     console.error(`${preMessage} ${(error as Error).message}`);
     process.exit(1);
   }

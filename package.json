@@ -26,10 +26,9 @@
   ],
   "scripts": {
     "test": "vitest --run",
-    "test-cov": "rm -rf coverage && vitest run --coverage",
-    "test-stg": "vitest related --run",
-    "dev": "node --watch --import @swc-node/register/esm-register src/index.ts",
-    "build": "rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths && chmod +x dist/index.js",
+    "test:cov": "rm -rf coverage && vitest run --coverage",
+    "dev": "node --import @swc-node/register/esm-register --watch src/index.ts",
+    "build": "rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths && chmod +x dist/index.js && cp src/*.json dist",
     "start": "node dist",
     "prepare": "husky"
   },

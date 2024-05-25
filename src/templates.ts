@@ -3,6 +3,7 @@ import path from 'node:path';
 import chalk from 'chalk';
 import { exec, TS_NEW_DIRECTORY } from '#/system.js';
 import { ProjectType } from '#/types.js';
+import templateUpdates from './template-updates.json' assert { type: 'json' };
 
 export async function scaffoldTemplates(
   projectType: ProjectType,
@@ -10,12 +11,12 @@ export async function scaffoldTemplates(
 ): Promise<void> {
   const templatesDirectory = path.resolve(TS_NEW_DIRECTORY, '../templates');
 
-  await copyDirectory(path.join(templatesDirectory, 'common'), projectDirectory, projectType);
-  await copyDirectory(path.join(templatesDirectory, projectType), projectDirectory, projectType);
-  await adjustPackageJson(projectType, projectDirectory);
+  await copyFiles(path.join(templatesDirectory, 'common'), projectDirectory, projectType);
+  await copyFiles(path.join(templatesDirectory, projectType), projectDirectory, projectType);
+  await adjustTemplates(projectType, projectDirectory);
 }
 
-async function copyDirectory(
+async function copyFiles(
   sourceDirectory: string,
   destinationDirectory: string,
   projectType: ProjectType,
@@ -24,6 +25,7 @@ async function copyDirectory(
   try {
     await access(destinationDirectory);
   } catch {
+    // eslint-disable-next-line no-console
     console.info(`${created} directory: ${destinationDirectory}`);
   }
   await mkdir(destinationDirectory, { recursive: true });
@@ -35,14 +37,14 @@ async function copyDirectory(
     let destinationPath = path.join(destinationDirectory, entry.name);
 
     if (entry.isDirectory()) {
-      await copyDirectory(sourcePath, destinationPath, projectType);
+      await copyFiles(sourcePath, destinationPath, projectType);
     } else {
       if (entry.name === '.gitignore.example') {
         destinationPath = destinationPath.replace('.example', '');
       }
 
       if (
-        (projectType === 'vite' && entry.name === 'vitest.config.mts') ||
+        (projectType === 'vite' && entry.name === 'vitest.config.ts') ||
         (projectType === 'next' && entry.name === '.swcrc')
       ) {
         continue;
@@ -51,6 +53,7 @@ async function copyDirectory(
       try {
         await access(destinationPath);
       } catch {
+        // eslint-disable-next-line no-console
         console.info(`${created} file: ${destinationPath}`);
       }
       await copyFile(sourcePath, destinationPath);
@@ -58,53 +61,12 @@ async function copyDirectory(
   }
 }
 
-async function adjustPackageJson(
-  projectType: ProjectType,
-  projectDirectory: string,
-): Promise<void> {
+async function adjustTemplates(projectType: ProjectType, projectDirectory: string): Promise<void> {
   const commands: string[] = [
     `npm pkg set name=${projectDirectory}`,
     'npm pkg set scripts.prepare="husky"',
+    ...templateUpdates[projectType],
   ];
-  switch (projectType) {
-    case 'node': {
-      commands.push(
-        'npm pkg set scripts.dev="node --import @swc-node/register/esm-register --watch src/index.ts"',
-        'npm pkg set scripts.build="rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths"',
-        'npm pkg set scripts.start="node dist"',
-        'npm pkg set type="module"',
-      );
-      break;
-    }
-    case 'nest': {
-      commands.push(
-        'npm pkg set scripts.dev="node --import @swc-node/register/esm-register --watch src/index.ts"',
-        'npm pkg set scripts.build="rm -rf dist && nest build"',
-        'npm pkg set scripts.start="node dist"',
-        'npm pkg set type="module"',
-      );
-      break;
-    }
-    case 'vite': {
-      commands.push(
-        'npm pkg set scripts.dev="vite"',
-        'npm pkg set scripts.build="vite build"',
-        'npm pkg set scripts.start="vite preview"',
-      );
-      break;
-    }
-    case 'next': {
-      commands.push(
-        'npm pkg set scripts.dev="next dev"',
-        'npm pkg set scripts.build="next build"',
-        'npm pkg set scripts.start="next start"',
-      );
-      break;
-    }
-    default: {
-      break;
-    }
-  }
 
   for await (const command of commands) {
     await exec(command, { stdio: 'ignore', cwd: projectDirectory });
