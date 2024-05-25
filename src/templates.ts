@@ -71,15 +71,17 @@ async function adjustPackageJson(
       commands.push(
         'npm pkg set scripts.dev="node --import @swc-node/register/esm-register --watch src/index.ts"',
         'npm pkg set scripts.build="rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths"',
+        'npm pkg set scripts.start="node dist"',
         'npm pkg set type="module"',
       );
       break;
     }
     case 'nest': {
       commands.push(
-        'npm pkg set scripts.dev="node -r @swc-node/register --watch src/main.ts"',
+        'npm pkg set scripts.dev="node --import @swc-node/register/esm-register --watch src/index.ts"',
         'npm pkg set scripts.build="rm -rf dist && nest build"',
-        'npm pkg set scripts.start="node dist/main"',
+        'npm pkg set scripts.start="node dist"',
+        'npm pkg set type="module"',
       );
       break;
     }
