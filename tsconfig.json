@@ -16,6 +16,7 @@
     "noEmit": true,
     "outDir": "dist",
     "paths": { "#/*": ["./src/*"] },
+    // "plugins": [{ "name": "next" }],
     "preserveSymlinks": true,
     "removeComments": true,
     "resolveJsonModule": true,

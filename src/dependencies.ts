@@ -6,15 +6,12 @@ const commonDevelopmentDeps = [
   '@commitlint/cli',
   '@commitlint/config-conventional',
   '@eslint/js',
-  '@next/eslint-plugin-next',
   '@trivago/prettier-plugin-sort-imports',
   '@types/node',
   '@vitest/coverage-v8',
   'eslint-config-prettier',
   'eslint-import-resolver-typescript',
   'eslint-plugin-import',
-  'eslint-plugin-react-hooks',
-  'eslint-plugin-react',
   'eslint-plugin-unicorn',
   'eslint-plugin-vitest',
   'eslint',
@@ -23,19 +20,13 @@ const commonDevelopmentDeps = [
   'prettier',
   'typescript-eslint',
   'typescript',
+  'unplugin-swc',
   'vitest',
 ];
 
 const dependencies: Record<ProjectType, { deps: string[]; devDeps: string[] }> = {
   node: {
-    devDeps: [
-      '@swc-node/register',
-      '@swc/cli',
-      '@swc/core',
-      '@swc/types',
-      '@types/node',
-      'unplugin-swc',
-    ],
+    devDeps: ['@swc-node/register', '@swc/cli', '@swc/core', '@swc/types', '@types/node'],
     deps: [],
   },
 
@@ -69,6 +60,8 @@ const dependencies: Record<ProjectType, { deps: string[]; devDeps: string[] }> =
       '@types/react-dom',
       '@vitejs/plugin-react-swc',
       'autoprefixer',
+      'eslint-plugin-react-hooks',
+      'eslint-plugin-react',
       'jsdom',
       'postcss',
       'tailwindcss',
@@ -79,11 +72,15 @@ const dependencies: Record<ProjectType, { deps: string[]; devDeps: string[] }> =
 
   next: {
     devDeps: [
+      '@next/eslint-plugin-next',
       '@testing-library/dom',
       '@testing-library/jest-dom',
       '@testing-library/react',
       '@types/react',
       '@types/react-dom',
+      'autoprefixer',
+      'eslint-plugin-react-hooks',
+      'eslint-plugin-react',
       'jsdom',
       'postcss',
       'tailwindcss',

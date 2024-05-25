@@ -6,11 +6,13 @@
     "strictMode": true
   },
   "jsc": {
+    "target": "esnext",
     "parser": {
       "syntax": "typescript",
-      "tsx": false,
+      "tsx": true,
       "decorators": true,
-      "dynamicImport": true
+      "dynamicImport": true,
+      "importAssertions": true
     },
     "minify": {
       "compress": false,

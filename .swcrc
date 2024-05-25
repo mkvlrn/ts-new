@@ -7,12 +7,9 @@
   },
   "jsc": {
     "target": "esnext",
-    "experimental": {
-      "keepImportAssertions": true
-    },
     "parser": {
       "syntax": "typescript",
-      "tsx": false,
+      "tsx": true,
       "decorators": true,
       "dynamicImport": true,
       "importAssertions": true

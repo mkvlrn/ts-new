@@ -1,5 +1,6 @@
 import path from 'node:path';
 import react from '@vitejs/plugin-react-swc';
+import swc from 'unplugin-swc';
 import { defineConfig as baseDefineConfig } from 'vite';
 import { mergeConfig, defineConfig as testDefineConfig } from 'vitest/dist/config.js';
 
@@ -20,22 +21,30 @@ const baseConfig = baseDefineConfig({
 });
 
 const testConfig = testDefineConfig({
+  plugins: [swc.vite({ module: { type: 'es6' } })],
   test: {
     alias: { '#': path.resolve('.', './src') },
-    include: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
+    include: ['src/**/*.spec.ts', 'src/**/*.spec.tsx', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
     coverage: {
       reportsDirectory: 'coverage',
       reporter: ['lcov', 'html', 'text'],
       all: true,
       include: ['src/**/*'],
-      exclude: ['src/index.ts', '**/*.spec.ts', 'src/index.tsx', '**/*.spec.tsx', '**/*.d.ts'],
+      exclude: [
+        'src/index.ts',
+        'src/**/*.spec.ts',
+        'src/**/*.spec.tsx',
+        'src/**/*.test.ts',
+        'src/**/*.test.tsx',
+        '**/*.d.ts',
+      ],
     },
     env: {
       NODE_ENV: 'test',
     },
     environment: 'jsdom',
     passWithNoTests: true,
-    setupFiles: ['./vitest.setup.mts'],
+    setupFiles: ['./vitest.setup.ts'],
   },
 });
 

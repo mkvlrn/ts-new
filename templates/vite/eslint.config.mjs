@@ -16,11 +16,10 @@
 // TODO - revisit these rules
 // @ts-check
 import eslint from '@eslint/js';
-// import pluginNext from '@next/eslint-plugin-next';
 import configPrettier from 'eslint-config-prettier';
 import * as pluginImport from 'eslint-plugin-import';
-// import pluginReact from 'eslint-plugin-react';
-// import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginUnicorn from 'eslint-plugin-unicorn';
 import pluginVitest from 'eslint-plugin-vitest';
 import eslintTypescript, { parser } from 'typescript-eslint';
@@ -78,19 +77,17 @@ export default eslintTypescript.config(
   },
 
   // eslint-plugin-react, eslint-plugin-react-hooks, @next/eslint-plugin-next
-  // {
-  //   plugins: {
-  //     react: pluginReact,
-  //     'react-hooks': pluginReactHooks,
-  //     '@next/next': pluginNext,
-  //   },
-  //   // @ts-expect-error, probably something to do with flat config support
-  //   rules: {
-  //     ...pluginReact.configs['jsx-runtime'].rules,
-  //     ...pluginReactHooks.configs.recommended.rules,
-  //     ...pluginNext.configs['core-web-vitals'].rules,
-  //   },
-  // },
+  {
+    plugins: {
+      react: pluginReact,
+      'react-hooks': pluginReactHooks,
+    },
+    // @ts-expect-error, probably something to do with flat config support
+    rules: {
+      ...pluginReact.configs['jsx-runtime'].rules,
+      ...pluginReactHooks.configs.recommended.rules,
+    },
+  },
 
   // eslint-plugin-unicorn
   {
