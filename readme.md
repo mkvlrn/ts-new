@@ -24,7 +24,7 @@ Each project will have the following tools and configurations:
 - [editorconfig](https://editorconfig.org/) to maintain consistent coding styles between different editors and IDEs
 - [git](https://git-scm.com/) with a standard `.gitignore` file
 - [prettier](https://prettier.io/) with a opinionated configuration on top of editorconfig
-- [eslint](https://eslint.org/) with a few plugins and a configuration that aims to be somewhat strict without being too annoying; based on [airbnb's](https://github.com/airbnb/javascript) style guide and the awesome [unicorn rules](https://github.com/sindresorhus/eslint-plugin-unicorn)
+- [eslint](https://eslint.org/) with a few plugins and a configuration that aims to be somewhat strict without being too annoying; based on the recommended eslint rules for typescript and the awesome [unicorn rules](https://github.com/sindresorhus/eslint-plugin-unicorn)
 - [vitest](https://vitest.dev/) as a test runner, because Jest is _terrible_
 - [lint-staged](https://github.com/lint-staged/lint-staged) to glue together the other tools that need to run on staged files
 - [husky](https://github.com/typicode/husky) to run the lint-staged commands on pre-commit hooks

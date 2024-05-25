@@ -12,7 +12,7 @@
   "editor.wordWrapColumn": 100,
   "editor.wordWrap": "wordWrapColumn",
   "eslint.validate": ["typescript", "typescriptreact"],
-  "prettier.configPath": "./.prettierrc.json",
+  "prettier.configPath": "./prettier.config.mjs",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifierEnding": "js",
   "typescript.suggest.paths": true,

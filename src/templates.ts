@@ -1,9 +1,16 @@
-/* eslint-disable no-console */
 import { access, copyFile, mkdir, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import chalk from 'chalk';
 import { exec, TS_NEW_DIRECTORY } from '#/system.js';
 import { ProjectType } from '#/types.js';
+
+export async function scaffoldTemplates(projectType: ProjectType, projectDirectory: string) {
+  const templatesDirectory = path.resolve(TS_NEW_DIRECTORY, '../templates');
+
+  await copyDirectory(path.join(templatesDirectory, 'common'), projectDirectory, projectType);
+  await copyDirectory(path.join(templatesDirectory, projectType), projectDirectory, projectType);
+  await adjustPackageJson(projectType, projectDirectory);
+}
 
 async function copyDirectory(
   sourceDirectory: string,
@@ -35,7 +42,6 @@ async function copyDirectory(
         (projectType === 'vite' && entry.name === 'vitest.config.mts') ||
         (projectType === 'next' && entry.name === '.swcrc')
       ) {
-        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -94,12 +100,4 @@ async function adjustPackageJson(projectType: ProjectType, projectDirectory: str
   for await (const command of commands) {
     await exec(command, { stdio: 'ignore', cwd: projectDirectory });
   }
-}
-
-export async function copyTemplates(projectType: ProjectType, projectDirectory: string) {
-  const templatesDirectory = path.resolve(TS_NEW_DIRECTORY, '../templates');
-
-  await copyDirectory(path.join(templatesDirectory, 'common'), projectDirectory, projectType);
-  await copyDirectory(path.join(templatesDirectory, projectType), projectDirectory, projectType);
-  await adjustPackageJson(projectType, projectDirectory);
 }

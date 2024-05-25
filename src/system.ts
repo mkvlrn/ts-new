@@ -1,6 +1,4 @@
 /* eslint-disable unicorn/no-process-exit */
-
-/* eslint-disable no-console */
 import { exec as _exec, ExecOptions as _ExecOptions } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -9,8 +7,8 @@ import { promisify } from 'node:util';
 import chalk from 'chalk';
 import { PACKAGE_MANAGERS, PackageManager } from '#/types.js';
 
-type ExecOptions = _ExecOptions & {
-  stdio?: 'pipe' | 'ignore' | 'inherit' | Array<'pipe' | 'ignore' | 'inherit' | null | number>;
+export type ExecOptions = _ExecOptions & {
+  stdio?: 'pipe' | 'ignore' | 'inherit' | ('pipe' | 'ignore' | 'inherit' | null | number)[];
 };
 
 export const exec: (
@@ -23,7 +21,7 @@ export const TS_NEW_DIRECTORY = path.resolve(path.dirname(fileURLToPath(new URL(
 export async function showLogo() {
   const packageJsonPath = path.resolve(TS_NEW_DIRECTORY, '../package.json');
   const packageJsonFile = await readFile(packageJsonPath, 'utf8');
-  const packageJsonContents = JSON.parse(packageJsonFile);
+  const packageJsonContents = JSON.parse(packageJsonFile) as { version: string };
 
   const thisProject = chalk.cyanBright.bold('@mkvlrn/ts-new');
   const version = chalk.greenBright.bold(packageJsonContents.version);
