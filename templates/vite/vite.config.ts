@@ -8,40 +8,23 @@ const baseConfig = baseDefineConfig({
   plugins: [react()],
   root: 'src',
   publicDir: '../public',
-  resolve: {
-    alias: { '#': path.resolve('.', 'src') },
-  },
-  build: {
-    outDir: '../dist',
-    emptyOutDir: true,
-  },
-  server: {
-    port: 3000,
-  },
+  resolve: { alias: { '#': path.resolve('.', './src') } },
+  build: { outDir: '../dist', emptyOutDir: true },
+  server: { port: 3000 },
 });
 
 const testConfig = testDefineConfig({
   plugins: [swc.vite({ module: { type: 'es6' } })],
   test: {
     alias: { '#': path.resolve('.', './src') },
-    include: ['src/**/*.spec.ts', 'src/**/*.spec.tsx', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
     coverage: {
       reportsDirectory: 'coverage',
       reporter: ['lcov', 'html', 'text'],
       all: true,
       include: ['src/**/*'],
-      exclude: [
-        'src/index.ts',
-        'src/**/*.spec.ts',
-        'src/**/*.spec.tsx',
-        'src/**/*.test.ts',
-        'src/**/*.test.tsx',
-        '**/*.d.ts',
-      ],
+      exclude: ['**/*.{test,spec}.?(c|m)[jt]s?(x)', '**/*.d.ts'],
     },
-    env: {
-      NODE_ENV: 'test',
-    },
+    env: { NODE_ENV: 'test' },
     environment: 'jsdom',
     passWithNoTests: true,
     setupFiles: ['./vitest.setup.ts'],

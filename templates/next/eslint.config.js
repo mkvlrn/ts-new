@@ -1,7 +1,10 @@
 // @ts-check
 import eslint from '@eslint/js';
+import pluginNext from '@next/eslint-plugin-next';
 import configPrettier from 'eslint-config-prettier';
 import * as pluginImport from 'eslint-plugin-import';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginUnicorn from 'eslint-plugin-unicorn';
 import pluginVitest from 'eslint-plugin-vitest';
 import eslintTypescript, { parser } from 'typescript-eslint';
@@ -25,8 +28,8 @@ export default eslintTypescript.config(
     settings: { 'import/resolver': { typescript: {} } },
     ignores: ['**/node_modules/*', 'dist/*', 'coverage/*', 'templates/*'],
     rules: {
-      // recommends explicit return types on functions
-      '@typescript-eslint/explicit-function-return-type': 'warn',
+      // reminds you to remove scattered console statements
+      'no-console': 'warn',
     },
   },
 
@@ -59,6 +62,22 @@ export default eslintTypescript.config(
       // TODO - revisit these rules
       'import/default': 'off',
       'import/namespace': 'off',
+    },
+  },
+
+  // eslint-plugin-react, eslint-plugin-react-hooks, @next/eslint-plugin-next
+  {
+    files: ['*.jsx', '*.tsx'],
+    plugins: {
+      react: pluginReact,
+      'react-hooks': pluginReactHooks,
+      '@next/next': pluginNext,
+    },
+    // @ts-expect-error, probably something to do with flat config support
+    rules: {
+      ...pluginReact.configs['jsx-runtime'].rules,
+      ...pluginReactHooks.configs.recommended.rules,
+      ...pluginNext.configs['core-web-vitals'].rules,
     },
   },
 

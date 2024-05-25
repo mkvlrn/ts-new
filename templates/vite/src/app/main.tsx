@@ -1,8 +1,8 @@
-import { Logo } from '#/components/logo';
-import { Tagline } from '#/components/tagline';
-import { Title } from '#/components/title';
+import { Logo } from '#/components/logo.jsx';
+import { Tagline } from '#/components/tagline.jsx';
+import { Title } from '#/components/title.jsx';
 
-export function App() {
+export function App(): JSX.Element {
   return (
     <main className='flex h-screen bg-[#2f4858] text-[#daf7dc]'>
       <div className='m-auto'>

@@ -27,8 +27,8 @@ export default eslintTypescript.config(
     settings: { 'import/resolver': { typescript: {} } },
     ignores: ['**/node_modules/*', 'dist/*', 'coverage/*', 'templates/*'],
     rules: {
-      // recommends explicit return types on functions
-      '@typescript-eslint/explicit-function-return-type': 'warn',
+      // reminds you to remove scattered console statements
+      'no-console': 'warn',
     },
   },
 
@@ -66,6 +66,7 @@ export default eslintTypescript.config(
 
   // eslint-plugin-react, eslint-plugin-react-hooks, @next/eslint-plugin-next
   {
+    files: ['*.jsx', '*.tsx'],
     plugins: {
       react: pluginReact,
       'react-hooks': pluginReactHooks,

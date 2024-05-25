@@ -1,8 +1,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, test } from 'vitest';
-import { Logo } from '#/components/logo';
-import { Tagline } from '#/components/tagline';
-import { Title } from '#/components/title';
+import { Logo } from '#/components/logo.jsx';
+import { Tagline } from '#/components/tagline.jsx';
+import { Title } from '#/components/title.jsx';
 
 describe('all components', () => {
   beforeEach(() => {

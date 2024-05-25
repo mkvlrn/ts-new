@@ -1,6 +1,6 @@
 import logo from '#/assets/react.svg';
 
-export function Logo() {
+export function Logo(): JSX.Element {
   return (
     <img
       src={logo}

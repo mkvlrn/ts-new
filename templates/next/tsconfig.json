@@ -11,8 +11,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["Dom", "DOM.Iterable", "ESNext", "ESNext.Decorators"],
-    "module": "Node16",
-    "moduleResolution": "Node16",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "noEmit": true,
     "outDir": "dist",
     "paths": { "#/*": ["./src/*"] },
@@ -28,5 +28,12 @@
 
   "exclude": ["node_modules"],
 
-  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "*.d.ts",
+    "**/*.d.ts",
+    "vitest.setup.ts",
+    ".next/types/**/*.ts"
+  ]
 }

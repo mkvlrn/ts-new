@@ -3,11 +3,10 @@
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx",
-    "*.js",
-    "*.mjs",
-    "*.ts",
-    "*.mts",
     "*.d.ts",
+    "**/*.d.ts",
+    "*.js",
+    "*.ts",
     ".next/types/**/*.ts"
   ]
 }
