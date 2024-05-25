@@ -93,7 +93,7 @@ export async function installDependencies(
   projectType: ProjectType,
   packageManager: PackageManager,
   projectDirectory: string,
-) {
+): Promise<void> {
   const developmentDeps = [...commonDevelopmentDeps, ...dependencies[projectType].devDeps];
   const spinner = ora(`Installing dependencies with ${packageManager}...`).start();
   const options: ExecOptions = { stdio: 'ignore', cwd: projectDirectory };

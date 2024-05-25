@@ -4,7 +4,7 @@ import { promptForPackageManager, promptForProjectName, promptForProjectType } f
 import { checkForGitInstallation, errorHandler, sayGoodbye, showLogo } from '#/system.js';
 import { scaffoldTemplates } from '#/templates.js';
 
-async function main() {
+async function main(): Promise<void> {
   await showLogo();
   await checkForGitInstallation();
   const projectName = await promptForProjectName();

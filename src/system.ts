@@ -18,7 +18,7 @@ export const exec: (
 
 export const TS_NEW_DIRECTORY = path.resolve(path.dirname(fileURLToPath(new URL(import.meta.url))));
 
-export async function showLogo() {
+export async function showLogo(): Promise<void> {
   const packageJsonPath = path.resolve(TS_NEW_DIRECTORY, '../package.json');
   const packageJsonFile = await readFile(packageJsonPath, 'utf8');
   const packageJsonContents = JSON.parse(packageJsonFile) as { version: string };
@@ -28,12 +28,12 @@ export async function showLogo() {
   console.info(`🤖 ${thisProject} v${version}`);
 }
 
-export function sayGoodbye(projectName: string) {
+export function sayGoodbye(projectName: string): void {
   const projectDirectory = chalk.yellowBright(path.resolve(process.cwd(), projectName));
   console.info(chalk.cyanBright(`🚀 Your project is ready at ${projectDirectory}`));
 }
 
-export async function checkForGitInstallation() {
+export async function checkForGitInstallation(): Promise<void> {
   try {
     await exec('git --version', { stdio: 'ignore' });
   } catch {
@@ -58,7 +58,7 @@ export async function getAvailablePackageManagers(): Promise<PackageManager[]> {
   return availablePackageManagers;
 }
 
-export async function errorHandler(main: () => Promise<void>) {
+export async function errorHandler(main: () => Promise<void>): Promise<void> {
   try {
     await main();
   } catch (error) {

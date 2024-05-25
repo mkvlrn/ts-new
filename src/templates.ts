@@ -4,7 +4,10 @@ import chalk from 'chalk';
 import { exec, TS_NEW_DIRECTORY } from '#/system.js';
 import { ProjectType } from '#/types.js';
 
-export async function scaffoldTemplates(projectType: ProjectType, projectDirectory: string) {
+export async function scaffoldTemplates(
+  projectType: ProjectType,
+  projectDirectory: string,
+): Promise<void> {
   const templatesDirectory = path.resolve(TS_NEW_DIRECTORY, '../templates');
 
   await copyDirectory(path.join(templatesDirectory, 'common'), projectDirectory, projectType);
@@ -16,7 +19,7 @@ async function copyDirectory(
   sourceDirectory: string,
   destinationDirectory: string,
   projectType: ProjectType,
-) {
+): Promise<void> {
   const created = chalk.greenBright('CREATED');
   try {
     await access(destinationDirectory);
@@ -55,7 +58,10 @@ async function copyDirectory(
   }
 }
 
-async function adjustPackageJson(projectType: ProjectType, projectDirectory: string) {
+async function adjustPackageJson(
+  projectType: ProjectType,
+  projectDirectory: string,
+): Promise<void> {
   const commands: string[] = [
     `npm pkg set name=${projectDirectory}`,
     'npm pkg set scripts.prepare="husky"',

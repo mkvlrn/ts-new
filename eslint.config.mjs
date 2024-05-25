@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-
 /* eslint-disable import/no-extraneous-dependencies */
 
 /**
@@ -30,8 +24,8 @@ export default eslintTypescript.config(
   eslint.configs.recommended,
 
   // typescript-eslint
-  ...eslintTypescript.configs.strictTypeChecked,
-  ...eslintTypescript.configs.stylisticTypeChecked,
+  ...eslintTypescript.configs.strict,
+  ...eslintTypescript.configs.stylistic,
   {
     languageOptions: {
       parserOptions: {
@@ -43,6 +37,10 @@ export default eslintTypescript.config(
     },
     settings: { 'import/resolver': { typescript: {} } },
     ignores: ['**/node_modules/*', 'dist/*', 'coverage/*', 'templates/*'],
+    rules: {
+      // recommends explicit return types on functions
+      '@typescript-eslint/explicit-function-return-type': 'warn',
+    },
   },
 
   // eslint-plugin-import
