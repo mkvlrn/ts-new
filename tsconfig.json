@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "incremental": true,
+    "incremental": false,
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["Dom", "DOM.Iterable", "ESNext", "ESNext.Decorators"],

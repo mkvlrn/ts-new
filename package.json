@@ -1,6 +1,6 @@
 {
   "name": "@mkvlrn/ts-new",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A very opinionated cli tool for setting up a typescript project without frameworks/libs or using nest, vite, or next",
   "author": "Mike Valeriano <mkvlrn@gmail.com>",
   "repository": {
@@ -50,7 +50,7 @@
     "eslint-plugin-unicorn": "^53.0.0",
     "eslint-plugin-vitest": "^0.5.4",
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.4",
+    "lint-staged": "^15.2.5",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.10.0",
