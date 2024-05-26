@@ -16,13 +16,14 @@ const baseConfig = baseDefineConfig({
 const testConfig = testDefineConfig({
   plugins: [swc.vite({ module: { type: 'es6' } })],
   test: {
+    root: 'src',
     alias: { '#': path.resolve('.', './src') },
     coverage: {
       reportsDirectory: 'coverage',
       reporter: ['lcov', 'html', 'text'],
       all: true,
-      include: ['src'],
-      exclude: ['**/*.{test,spec}.?(c|m)[jt]s?(x)', '**/*.d.ts', 'src/index.ts?(x)'],
+
+      exclude: ['**/*.{test,spec}.?(c|m)[jt]s?(x)', '**/*.d.ts', 'index.ts?(x)'],
     },
     env: { NODE_ENV: 'test' },
     environment: 'jsdom',
