@@ -35,7 +35,9 @@
       "@swc/cli",
       "@swc/core",
       "@swc/types",
-      "@types/express"
+      "@types/express",
+      "@types/supertest",
+      "supertest"
     ],
     "prod": [
       "@nestjs/common",
