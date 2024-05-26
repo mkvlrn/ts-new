@@ -47,7 +47,6 @@ tmp
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 # vercel
 .vercel

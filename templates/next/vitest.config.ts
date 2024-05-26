@@ -16,6 +16,6 @@ export default defineConfig({
     env: { NODE_ENV: 'test' },
     environment: 'jsdom',
     passWithNoTests: true,
-    setupFiles: ['./vitest.setup.ts'],
+    setupFiles: ['vitest.setup.ts'],
   },
 });
