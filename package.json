@@ -1,6 +1,6 @@
 {
   "name": "@mkvlrn/ts-new",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A very opinionated cli tool for setting up a typescript project without frameworks/libs or using nest, vite, or next",
   "author": "Mike Valeriano <mkvlrn@gmail.com>",
   "repository": {

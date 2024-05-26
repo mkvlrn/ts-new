@@ -54,3 +54,20 @@ export async function promptForPackageManager(): Promise<PackageManager> {
 
   return answer;
 }
+
+export async function promptForConfirmation(
+  projectName: string,
+  projectType: ProjectType,
+  packageManager: PackageManager,
+): Promise<boolean> {
+  const message = `This will create a new ${chalk.redBright(projectType)} project in ${chalk.redBright(projectName)} using ${chalk.redBright(packageManager)}.`;
+  const answer = await select({
+    message: chalk.dim.yellow(`${message} Continue?`),
+    choices: [
+      { value: true, name: 'Yes' },
+      { value: false, name: 'No' },
+    ],
+  });
+
+  return answer;
+}

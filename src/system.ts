@@ -29,7 +29,13 @@ export async function showLogo(): Promise<void> {
   console.info(`🤖 ${thisProject} v${version}`);
 }
 
-export function sayGoodbye(projectName: string): void {
+export function sayGoodbye(projectName: string | null = null): void {
+  if (!projectName) {
+    // eslint-disable-next-line no-console
+    console.info(chalk.cyanBright('👋 Goodbye!'));
+    return;
+  }
+
   const projectDirectory = chalk.yellowBright(path.resolve(process.cwd(), projectName));
   // eslint-disable-next-line no-console
   console.info(chalk.cyanBright(`🚀 Your project is ready at ${projectDirectory}`));
