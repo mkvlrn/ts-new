@@ -26,7 +26,6 @@ export default eslintTypescript.config(
       },
     },
     settings: { 'import/resolver': { typescript: {} } },
-    ignores: ['**/node_modules/*', 'dist/*', 'coverage/*', 'templates/*'],
     rules: {
       // recommends explicit return types on functions
       '@typescript-eslint/explicit-function-return-type': 'warn',

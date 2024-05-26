@@ -23,7 +23,7 @@
     ]
   },
   "node": {
-    "dev": ["@swc-node/register", "@swc/cli", "@swc/core", "@swc/types", "@types/node"],
+    "dev": ["@swc-node/register", "@swc/cli", "@swc/core", "@swc/types"],
     "prod": []
   },
   "nest": {
@@ -35,8 +35,7 @@
       "@swc/cli",
       "@swc/core",
       "@swc/types",
-      "@types/express",
-      "unplugin-swc"
+      "@types/express"
     ],
     "prod": [
       "@nestjs/common",

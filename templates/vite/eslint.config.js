@@ -25,7 +25,6 @@ export default eslintTypescript.config(
       },
     },
     settings: { 'import/resolver': { typescript: {} } },
-    ignores: ['**/node_modules/*', 'dist/*', 'coverage/*', 'templates/*'],
     rules: {
       // reminds you to remove scattered console statements
       'no-console': 'warn',
