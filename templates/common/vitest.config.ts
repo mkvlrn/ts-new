@@ -4,16 +4,16 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [swc.vite({ module: { type: 'es6' } })],
-  resolve: {alias: { '#': path.resolve('.', 'src') },},
+  resolve: { alias: { '#': path.resolve('.', 'src') } },
   test: {
     coverage: {
       reportsDirectory: 'coverage',
       reporter: ['lcov', 'html', 'text'],
       all: true,
-      include: ['src/**/*'],
-      exclude: ['**/*.{test,spec}.?(c|m)[jt]s?(x)', "**/*.d.ts"],
+      include: ['src'],
+      exclude: ['**/*.{test,spec}.?(c|m)[jt]s?(x)', '**/*.d.ts', 'src/index.ts?(x)'],
     },
-    env: {NODE_ENV: 'test',},
+    env: { NODE_ENV: 'test' },
     environment: 'node',
     passWithNoTests: true,
     setupFiles: ['./vitest.setup.ts'],
