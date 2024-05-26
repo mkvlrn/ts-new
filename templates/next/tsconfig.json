@@ -34,6 +34,6 @@
     "*.d.ts",
     "**/*.d.ts",
     "vitest.setup.ts",
-    ".next/types/**/*.ts"
+    "./dist/types/**/*.ts"
   ]
 }

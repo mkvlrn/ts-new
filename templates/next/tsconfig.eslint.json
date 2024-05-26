@@ -7,6 +7,6 @@
     "**/*.d.ts",
     "*.js",
     "*.ts",
-    ".next/types/**/*.ts"
+    "./dist/types/**/*.ts"
   ]
 }
