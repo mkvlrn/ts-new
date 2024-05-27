@@ -75,7 +75,7 @@ export default eslintTypescript.config(
       // some names come from external sources, gotta adapt
       'unicorn/prevent-abbreviations': [
         'error',
-        { allowList: { ProcessEnv: true }, ignore: ['next-env'] },
+        { allowList: { ProcessEnv: true }, ignore: ['next-env', 'vite-env'] },
       ],
     },
   },
