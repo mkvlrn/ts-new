@@ -11,6 +11,7 @@ const baseConfig = baseDefineConfig({
   resolve: { alias: { '#': path.resolve('.', './src') } },
   build: { outDir: '../dist', emptyOutDir: true },
   server: { port: 3000 },
+  envDir: '../',
 });
 
 const testConfig = testDefineConfig({
