@@ -123,6 +123,7 @@ export async function cleanupTemplate(projectName: string): Promise<void> {
     await unlink(path.resolve(process.cwd(), projectName, '.github', 'dependabot.yml'));
     await unlink(path.resolve(process.cwd(), projectName, 'readme.md'));
     await unlink(path.resolve(process.cwd(), projectName, 'sonar-project.properties'));
+    await unlink(path.resolve(process.cwd(), projectName, 'yarn.lock'));
 
     // remove unnecessary lines from ci workflow
     const ciWorkflowPath = path.resolve(
