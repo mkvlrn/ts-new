@@ -57,7 +57,11 @@ export async function promptForConfirmation(
   projectType: string,
   packageManager: string,
 ): Promise<boolean> {
-  const message = `This will create a ${chalk.redBright(projectType.split('-').pop())} project in ${chalk.redBright(projectName)} using ${chalk.redBright(packageManager)}.`;
+  const highlightType = `${chalk.redBright(projectType.split('-').pop())}`;
+  const highlightProject = `${chalk.redBright(`./${projectName}`)}`;
+  const highlightManager = `${chalk.redBright(packageManager)}`;
+  const message = `This will create a ${highlightType} project in ${highlightProject} using ${highlightManager}.`;
+
   const answer = await select({
     message: chalk.dim.yellow(`${message} Continue?`),
     choices: [

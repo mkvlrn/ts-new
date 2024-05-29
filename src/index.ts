@@ -16,30 +16,37 @@ import {
   sayGoodbye,
   showLogo,
 } from '#/system.js';
+import { ProjectError } from '#/types.js';
 
 async function main(): Promise<void> {
-  await showLogo();
+  let projectName = '';
 
-  const projectName = await promptForProjectName();
+  try {
+    await showLogo();
 
-  await checkForGitInstallation();
-  const availablePackageManagers = await getAvailablePackageManagers();
-  const templateList = await getTemplateList();
+    projectName = await promptForProjectName();
 
-  const projectType = await promptForProjectType(templateList);
-  const packageManager = await promptForPackageManager(availablePackageManagers);
-  const confirm = await promptForConfirmation(projectName, projectType, packageManager);
+    await checkForGitInstallation();
+    const availablePackageManagers = await getAvailablePackageManagers();
+    const templateList = await getTemplateList();
 
-  if (!confirm) {
-    sayGoodbye();
-    return;
+    const projectType = await promptForProjectType(templateList);
+    const packageManager = await promptForPackageManager(availablePackageManagers);
+    const confirm = await promptForConfirmation(projectName, projectType, packageManager);
+
+    if (!confirm) {
+      sayGoodbye();
+      return;
+    }
+
+    await cloneTemplate(projectType, projectName);
+    await cleanupTemplate(projectName);
+    await installDependencies(projectName, packageManager);
+
+    sayGoodbye(projectName);
+  } catch (error) {
+    throw new ProjectError((error as Error).message, projectName);
   }
-
-  await cloneTemplate(projectType, projectName);
-  await cleanupTemplate(projectName);
-  await installDependencies(projectName, packageManager);
-
-  sayGoodbye(projectName);
 }
 
 await errorHandler(main);

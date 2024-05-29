@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import chalk from 'chalk';
 import ora from 'ora';
-import { ExecOptions, GithubRepoResponse } from '#/types.js';
+import { ExecOptions, GithubRepoResponse, ProjectError } from '#/types.js';
 
 const exec: (
   command: string,
@@ -27,10 +27,16 @@ export async function showLogo(): Promise<void> {
   console.info(`🤖 ${thisProject} v${version}`);
 }
 
-export function sayGoodbye(projectName: string | null = null): void {
-  if (!projectName) {
+export function sayGoodbye(projectName: string | false | null = null): void {
+  if (projectName === null) {
     // eslint-disable-next-line no-console
     console.info(chalk.cyanBright('👋 Goodbye!'));
+    return;
+  }
+
+  if (projectName === false) {
+    // eslint-disable-next-line no-console
+    console.info(chalk.cyanBright('👋 Goodbye. 😞'));
     return;
   }
 
@@ -151,24 +157,22 @@ export async function installDependencies(
   }
 }
 
-export async function rollback(projectName: string): Promise<void> {
-  try {
-    spinner.start('rolling back');
-    await rm(path.resolve(process.cwd(), projectName), { recursive: true, force: true });
-    spinner.succeed();
-  } catch (error) {
-    spinner.fail();
-    throw new Error(`failed to roll back (${(error as Error).message})`);
-  }
-}
-
 export async function errorHandler(main: () => Promise<void>): Promise<void> {
   try {
     await main();
   } catch (error) {
-    const preMessage = chalk.redBright.bold('an error occurred:');
-    // eslint-disable-next-line no-console
-    console.error(`${preMessage} ${(error as Error).message}`);
+    if (error instanceof ProjectError) {
+      const { message, projectName } = error;
+      const preMessage = chalk.redBright.bold('an error occurred:');
+      // eslint-disable-next-line no-console
+      console.error(`${preMessage} ${message}`);
+
+      spinner.start('rolling back changes');
+      await rm(path.resolve(process.cwd(), projectName), { recursive: true, force: true });
+      spinner.succeed();
+      sayGoodbye(false);
+    }
+
     process.exit(1);
   }
 }
