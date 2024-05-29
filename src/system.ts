@@ -143,7 +143,7 @@ export async function installDependencies(
     const command = `${packageManager} install`;
     await exec(command, EXEC_OPTIONS);
     await exec('git add .', EXEC_OPTIONS);
-    await exec('git commit -m "initial commit"', EXEC_OPTIONS);
+    await exec('git commit -m "chore: initial commit"', EXEC_OPTIONS);
     spinner.succeed();
   } catch (error) {
     spinner.fail();
