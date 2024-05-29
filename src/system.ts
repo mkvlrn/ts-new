@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/no-process-exit */
 import { exec as _exec } from 'node:child_process';
-import { readFile, rm, unlink } from 'node:fs/promises';
+import { readFile, rm, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -111,10 +111,31 @@ export async function cleanupTemplate(projectName: string): Promise<void> {
 
   try {
     spinner.start('cleaning up template');
+    // restart repository
     await rm(path.resolve(process.cwd(), projectName, '.git'), { recursive: true, force: true });
     await exec('git init', EXEC_OPTIONS);
+
+    // remove unnecessary files
     await unlink(path.resolve(process.cwd(), projectName, '.github', 'dependabot.yml'));
     await unlink(path.resolve(process.cwd(), projectName, 'readme.md'));
+    await unlink(path.resolve(process.cwd(), projectName, 'sonar-project.properties'));
+
+    // remove unnecessary lines from ci workflow
+    const ciWorkflowPath = path.resolve(
+      process.cwd(),
+      projectName,
+      '.github',
+      'workflows',
+      'checks.yml',
+    );
+    const ciWorkflowFile = await readFile(ciWorkflowPath, 'utf8');
+    // eslint-disable-next-line prefer-const
+    let ciWorkflowLines = ciWorkflowFile.split('\n');
+    const testCovIndex = ciWorkflowLines.findIndex((line) => line.includes('test:cov'));
+    ciWorkflowLines[testCovIndex] = ciWorkflowLines[testCovIndex].replace('test:cov', 'test');
+    await writeFile(ciWorkflowPath, ciWorkflowLines.splice(0, testCovIndex + 1).join('\n') + '\n');
+
+    // update package.json
     await exec(`npm pkg set name="${projectName}"`, EXEC_OPTIONS);
     await exec(`npm pkg set description="${projectName}"`, EXEC_OPTIONS);
     const gitName = await exec('git config user.name', EXEC_OPTIONS);
