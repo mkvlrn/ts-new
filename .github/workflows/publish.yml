@@ -42,7 +42,9 @@ jobs:
           git tag "v$NEW_VERSION"
           git push origin "v$NEW_VERSION"
 
-      - run: npm pkg delete scripts.prepare
+      - run: yarn install
+
+      - run: yarn build
 
       - run: npm publish
 
