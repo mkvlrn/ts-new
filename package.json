@@ -20,7 +20,6 @@
   },
   "files": [
     "dist",
-    "templates",
     "package.json",
     "readme.md"
   ],
@@ -28,7 +27,7 @@
     "test": "vitest --run",
     "test:cov": "rm -rf coverage && vitest run --coverage",
     "dev": "node --import @swc-node/register/esm-register --watch src/index.ts",
-    "build": "rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths && chmod +x dist/index.js && cp src/*.json dist",
+    "build": "rm -rf dist && swc src -d dist --ignore **/*.spec.ts --strip-leading-paths && chmod +x dist/index.js",
     "start": "node dist",
     "prepare": "husky"
   },
