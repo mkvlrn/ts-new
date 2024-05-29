@@ -119,7 +119,7 @@ export async function cleanupTemplate(projectName: string): Promise<void> {
     await exec(`npm pkg set description="${projectName}"`, EXEC_OPTIONS);
     const gitName = await exec('git config user.name', EXEC_OPTIONS);
     const gitEmail = await exec('git config user.email', EXEC_OPTIONS);
-    if (!gitName.stderr && !gitEmail.stderr) {
+    if (!gitName.stdout.trim() && !gitEmail.stdout.trim()) {
       await exec(`npm pkg delete author`, EXEC_OPTIONS);
     } else {
       const author = `${gitName.stdout.trim()} <${gitEmail.stdout.trim()}>`;
