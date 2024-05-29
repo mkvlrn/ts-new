@@ -44,7 +44,3 @@ NestJs and Next.js have their own way of doing things, and both of them are okay
 Just generate a project and see for yourself. If you have any questions, feel free to open an issue or a PR.
 
 The defaults are opinionated, but very sane and easy to adapt to your needs.
-
-## a note on vscode
-
-The CLI tool copies a `.vscode` folder with extension recommendations and settings that go well with the tools and configurations provided. You should install the recommended extensions to get the most out of the setup.
