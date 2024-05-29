@@ -12,10 +12,8 @@
   "editor.wordWrapColumn": 100,
   "editor.wordWrap": "wordWrapColumn",
   "eslint.validate": ["typescript", "typescriptreact"],
-  "prettier.configPath": "./prettier.config.js",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifierEnding": "js",
   "typescript.suggest.paths": true,
-  "typescript.tsdk": "./node_modules/typescript/lib",
-  "vitest.configSearchPatternExclude": "**/{node_modules,.*,templates,my-project}/**"
+  "typescript.tsdk": "./node_modules/typescript/lib"
 }

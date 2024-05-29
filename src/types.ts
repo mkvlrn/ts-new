@@ -1,4 +1,14 @@
-export const PROJECT_TYPES = ['node', 'nest', 'vite', 'next'] as const;
-export type ProjectType = (typeof PROJECT_TYPES)[number];
-export const PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm'] as const;
-export type PackageManager = (typeof PACKAGE_MANAGERS)[number];
+import { ExecOptions as _ExecOptions } from 'node:child_process';
+
+export interface GithubRepoResponse {
+  name: string;
+  full_name: string;
+
+  description: string;
+
+  is_template: boolean;
+}
+
+export interface ExecOptions extends _ExecOptions {
+  stdio?: 'pipe' | 'ignore' | 'inherit' | ('pipe' | 'ignore' | 'inherit' | null | number)[];
+}

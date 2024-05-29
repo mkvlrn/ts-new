@@ -1,8 +1,7 @@
 import { access } from 'node:fs/promises';
 import { input, select } from '@inquirer/prompts';
 import chalk from 'chalk';
-import { getAvailablePackageManagers } from '#/system.js';
-import { PACKAGE_MANAGERS, PackageManager, PROJECT_TYPES, ProjectType } from '#/types.js';
+import { GithubRepoResponse } from '#/types.js';
 
 export async function promptForProjectName(): Promise<string> {
   const answer = await input({
@@ -28,27 +27,25 @@ export async function promptForProjectName(): Promise<string> {
   return answer;
 }
 
-export async function promptForProjectType(): Promise<ProjectType> {
+export async function promptForProjectType(templateList: GithubRepoResponse[]): Promise<string> {
   const answer = await select({
     message: chalk.dim.yellow('Project type'),
-    choices: PROJECT_TYPES.map((projectType) => ({
-      value: projectType,
-      name: projectType,
+    choices: templateList.map((template) => ({
+      name: `${template.name.split('-').pop()} (${template.description})`,
+      value: template.name,
     })),
   });
 
   return answer;
 }
 
-export async function promptForPackageManager(): Promise<PackageManager> {
-  const available = await getAvailablePackageManagers();
-
+export async function promptForPackageManager(availablePackageManagers: string[]): Promise<string> {
   const answer = await select({
     message: chalk.dim.yellow('Package manager'),
-    choices: PACKAGE_MANAGERS.map((packageManager) => ({
+    choices: ['npm', 'yarn', 'pnpm'].map((packageManager) => ({
       value: packageManager,
       name: packageManager,
-      disabled: available.includes(packageManager) ? false : 'not available',
+      disabled: availablePackageManagers.includes(packageManager) ? false : 'not available',
     })),
   });
 
@@ -57,10 +54,10 @@ export async function promptForPackageManager(): Promise<PackageManager> {
 
 export async function promptForConfirmation(
   projectName: string,
-  projectType: ProjectType,
-  packageManager: PackageManager,
+  projectType: string,
+  packageManager: string,
 ): Promise<boolean> {
-  const message = `This will create a new ${chalk.redBright(projectType)} project in ${chalk.redBright(projectName)} using ${chalk.redBright(packageManager)}.`;
+  const message = `This will create a ${chalk.redBright(projectType.split('-').pop())} project in ${chalk.redBright(projectName)} using ${chalk.redBright(packageManager)}.`;
   const answer = await select({
     message: chalk.dim.yellow(`${message} Continue?`),
     choices: [

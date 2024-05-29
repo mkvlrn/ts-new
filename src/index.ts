@@ -1,27 +1,44 @@
 #!/usr/bin/env node
-import { installDependencies } from '#/dependencies.js';
 import {
   promptForConfirmation,
   promptForPackageManager,
   promptForProjectName,
   promptForProjectType,
 } from '#/prompts.js';
-import { checkForGitInstallation, errorHandler, sayGoodbye, showLogo } from '#/system.js';
-import { scaffoldTemplates } from '#/templates.js';
+import {
+  checkForGitInstallation,
+  cleanupTemplate,
+  cloneTemplate,
+  errorHandler,
+  getAvailablePackageManagers,
+  getTemplateList,
+  installDependencies,
+  sayGoodbye,
+  showLogo,
+} from '#/system.js';
 
 async function main(): Promise<void> {
   await showLogo();
-  await checkForGitInstallation();
+
   const projectName = await promptForProjectName();
-  const projectType = await promptForProjectType();
-  const packageManager = await promptForPackageManager();
+
+  await checkForGitInstallation();
+  const availablePackageManagers = await getAvailablePackageManagers();
+  const templateList = await getTemplateList();
+
+  const projectType = await promptForProjectType(templateList);
+  const packageManager = await promptForPackageManager(availablePackageManagers);
   const confirm = await promptForConfirmation(projectName, projectType, packageManager);
+
   if (!confirm) {
     sayGoodbye();
     return;
   }
-  await scaffoldTemplates(projectType, projectName);
-  await installDependencies(projectType, packageManager, projectName);
+
+  await cloneTemplate(projectType, projectName);
+  await cleanupTemplate(projectName);
+  await installDependencies(projectName, packageManager);
+
   sayGoodbye(projectName);
 }
 
