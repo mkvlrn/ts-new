@@ -62,8 +62,12 @@ export async function getAvailablePackageManagers(): Promise<string[]> {
   try {
     spinner.start('checking for available package managers');
     for await (const pm of ['npm', 'yarn', 'pnpm']) {
-      await exec(`${pm} --version`, { stdio: 'ignore' });
-      availablePackageManagers.push(pm);
+      try {
+        await exec(`${pm} --version`, { stdio: 'ignore' });
+        availablePackageManagers.push(pm);
+      } catch {
+        continue;
+      }
     }
     if (availablePackageManagers.length === 0) {
       throw new Error('no available package managers found');
