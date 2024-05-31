@@ -107,7 +107,11 @@ export async function cloneTemplate(templateName: string, projectName: string): 
   }
 }
 
-export async function cleanupTemplate(projectName: string, packageManager: string): Promise<void> {
+export async function cleanupTemplate(
+  projectName: string,
+  packageManager: string,
+  gitInit: boolean,
+): Promise<void> {
   const EXEC_OPTIONS: ExecOptions = {
     cwd: path.resolve(process.cwd(), projectName),
     stdio: 'ignore',
@@ -117,7 +121,9 @@ export async function cleanupTemplate(projectName: string, packageManager: strin
     spinner.start('cleaning up template');
     // restart repository
     await rm(path.resolve(process.cwd(), projectName, '.git'), { recursive: true, force: true });
-    await exec('git init', EXEC_OPTIONS);
+    if (gitInit) {
+      await exec('git init', EXEC_OPTIONS);
+    }
 
     // remove unnecessary files
     await unlink(path.resolve(process.cwd(), projectName, '.github', 'dependabot.yml'));
@@ -174,6 +180,7 @@ export async function cleanupTemplate(projectName: string, packageManager: strin
 export async function installDependencies(
   projectName: string,
   packageManager: string,
+  gitInit: boolean,
 ): Promise<void> {
   const EXEC_OPTIONS: ExecOptions = {
     cwd: path.resolve(process.cwd(), projectName),
@@ -182,10 +189,11 @@ export async function installDependencies(
 
   try {
     spinner.start(`installing dependencies using ${packageManager}`);
-    const command = `${packageManager} install`;
-    await exec(command, EXEC_OPTIONS);
-    await exec('git add .', EXEC_OPTIONS);
-    await exec('git commit -m "chore: initial commit"', EXEC_OPTIONS);
+    await exec(`${packageManager} install`, EXEC_OPTIONS);
+    if (gitInit) {
+      await exec('git add .', EXEC_OPTIONS);
+      await exec('git commit -m "chore: initial commit"', EXEC_OPTIONS);
+    }
     spinner.succeed();
   } catch (error) {
     spinner.fail();

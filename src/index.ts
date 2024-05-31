@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import {
   promptForConfirmation,
+  promptForGitInit,
   promptForPackageManager,
   promptForProjectName,
   promptForProjectType,
@@ -32,7 +33,8 @@ async function main(): Promise<void> {
 
     const projectType = await promptForProjectType(templateList);
     const packageManager = await promptForPackageManager(availablePackageManagers);
-    const confirm = await promptForConfirmation(projectName, projectType, packageManager);
+    const gitInit = await promptForGitInit();
+    const confirm = await promptForConfirmation(projectName, projectType, packageManager, gitInit);
 
     if (!confirm) {
       sayGoodbye();
@@ -40,8 +42,8 @@ async function main(): Promise<void> {
     }
 
     await cloneTemplate(projectType, projectName);
-    await cleanupTemplate(projectName, packageManager);
-    await installDependencies(projectName, packageManager);
+    await cleanupTemplate(projectName, packageManager, gitInit);
+    await installDependencies(projectName, packageManager, gitInit);
 
     sayGoodbye(projectName);
   } catch (error) {

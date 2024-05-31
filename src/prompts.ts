@@ -52,15 +52,29 @@ export async function promptForPackageManager(availablePackageManagers: string[]
   return answer;
 }
 
+export async function promptForGitInit(): Promise<boolean> {
+  const answer = await select({
+    message: chalk.dim.yellow('Initialize git and create first commit ?'),
+    choices: [
+      { value: true, name: 'Yes' },
+      { value: false, name: 'No' },
+    ],
+  });
+
+  return answer;
+}
+
 export async function promptForConfirmation(
   projectName: string,
   projectType: string,
   packageManager: string,
+  gitInit: boolean,
 ): Promise<boolean> {
   const highlightType = `${chalk.redBright(projectType.split('-').pop())}`;
   const highlightProject = `${chalk.redBright(`./${projectName}`)}`;
   const highlightManager = `${chalk.redBright(packageManager)}`;
-  const message = `This will create a ${highlightType} project in ${highlightProject} using ${highlightManager}.`;
+  const highlightGitInit = `${chalk.redBright(gitInit ? '' : 'not ')}`;
+  const message = `This will create a ${highlightType} project in ${highlightProject} using ${highlightManager} and a git repository will ${highlightGitInit}be initialized.`;
 
   const answer = await select({
     message: chalk.dim.yellow(`${message} Continue?`),
