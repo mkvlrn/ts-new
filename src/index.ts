@@ -40,7 +40,7 @@ async function main(): Promise<void> {
     }
 
     await cloneTemplate(projectType, projectName);
-    await cleanupTemplate(projectName);
+    await cleanupTemplate(projectName, packageManager);
     await installDependencies(projectName, packageManager);
 
     sayGoodbye(projectName);

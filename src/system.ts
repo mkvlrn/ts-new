@@ -107,7 +107,7 @@ export async function cloneTemplate(templateName: string, projectName: string): 
   }
 }
 
-export async function cleanupTemplate(projectName: string): Promise<void> {
+export async function cleanupTemplate(projectName: string, packageManager: string): Promise<void> {
   const EXEC_OPTIONS: ExecOptions = {
     cwd: path.resolve(process.cwd(), projectName),
     stdio: 'ignore',
@@ -139,6 +139,14 @@ export async function cleanupTemplate(projectName: string): Promise<void> {
     const testCovIndex = ciWorkflowLines.findIndex((line) => line.includes('test:cov'));
     ciWorkflowLines[testCovIndex] = ciWorkflowLines[testCovIndex].replace('test:cov', 'test');
     await writeFile(ciWorkflowPath, ciWorkflowLines.splice(0, testCovIndex + 1).join('\n') + '\n');
+
+    // replace package manage in husky hooks with the one selected
+    const newPackageManager = packageManager === `npm` ? 'npx' : `${packageManager}`;
+    const huskyPath = path.resolve(process.cwd(), projectName, '.husky');
+    const preCommitContents = `${newPackageManager} tsc --noemit\n${newPackageManager} lint-staged\n${newPackageManager} vitest --run\n`;
+    await writeFile(path.resolve(huskyPath, 'pre-commit'), preCommitContents);
+    const commitMessageContents = `${newPackageManager} commitlint --edit $1\n`;
+    await writeFile(path.resolve(huskyPath, 'commit-msg'), commitMessageContents);
 
     // update package.json
     await exec(`npm pkg set name="${projectName}"`, EXEC_OPTIONS);
