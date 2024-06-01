@@ -1,10 +1,10 @@
 import { access } from 'node:fs/promises';
+import path from 'node:path';
 import { input, select } from '@inquirer/prompts';
 import chalk from 'chalk';
-import { GithubRepoResponse } from '#/types.js';
 
-export async function promptForProjectName(): Promise<string> {
-  const answer = await input({
+async function getProjectName(): Promise<[string, string]> {
+  const projectName = await input({
     message: chalk.dim.yellow('Project name'),
     default: 'my-project',
     validate: async (projectName) => {
@@ -13,21 +13,18 @@ export async function promptForProjectName(): Promise<string> {
         return 'Please enter a valid directory name for your project.';
       }
 
-      try {
-        await access(projectName);
-        return 'A directory with this name already exists.';
-      } catch {
-        //
-      }
+      await access(projectName).catch(() => 'A directory with this name already exists.');
 
       return true;
     },
   });
 
-  return answer;
+  const projectPath = path.resolve(process.cwd(), projectName);
+
+  return [projectName, projectPath];
 }
 
-export async function promptForProjectType(templateList: GithubRepoResponse[]): Promise<string> {
+async function getProjectType(templateList: GithubRepoResponse[]): Promise<string> {
   const answer = await select({
     message: chalk.dim.yellow('Project type'),
     choices: templateList.map((template) => ({
@@ -39,7 +36,7 @@ export async function promptForProjectType(templateList: GithubRepoResponse[]): 
   return answer;
 }
 
-export async function promptForPackageManager(availablePackageManagers: string[]): Promise<string> {
+async function getPackageManager(availablePackageManagers: string[]): Promise<string> {
   const answer = await select({
     message: chalk.dim.yellow('Package manager'),
     choices: ['npm', 'yarn', 'pnpm'].map((packageManager) => ({
@@ -52,7 +49,7 @@ export async function promptForPackageManager(availablePackageManagers: string[]
   return answer;
 }
 
-export async function promptForGitInit(): Promise<boolean> {
+async function getGitInit(): Promise<boolean> {
   const answer = await select({
     message: chalk.dim.yellow('Initialize git and create first commit ?'),
     choices: [
@@ -64,7 +61,7 @@ export async function promptForGitInit(): Promise<boolean> {
   return answer;
 }
 
-export async function promptForConfirmation(
+async function getConfirmation(
   projectName: string,
   projectType: string,
   packageManager: string,
@@ -86,3 +83,11 @@ export async function promptForConfirmation(
 
   return answer;
 }
+
+export default {
+  getProjectName,
+  getProjectType,
+  getPackageManager,
+  getGitInit,
+  getConfirmation,
+};

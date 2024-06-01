@@ -1,54 +1,48 @@
 #!/usr/bin/env node
-import {
-  promptForConfirmation,
-  promptForGitInit,
-  promptForPackageManager,
-  promptForProjectName,
-  promptForProjectType,
-} from '#/prompts.js';
-import {
-  checkForGitInstallation,
-  cleanupTemplate,
-  cloneTemplate,
-  errorHandler,
-  getAvailablePackageManagers,
-  getTemplateList,
-  installDependencies,
-  sayGoodbye,
-  showLogo,
-} from '#/system.js';
-import { ProjectError } from '#/types.js';
+import { ProjectError } from '#/project-error.js';
+import prompts from '#/prompts.js';
+import system from '#/system.js';
 
 async function main(): Promise<void> {
-  let projectName = '';
+  let errorPath = '';
 
   try {
-    await showLogo();
+    await system.sayHello();
 
-    projectName = await promptForProjectName();
+    const [projectName, projectPath] = await prompts.getProjectName();
+    errorPath = projectPath;
 
-    await checkForGitInstallation();
-    const availablePackageManagers = await getAvailablePackageManagers();
-    const templateList = await getTemplateList();
+    process.on('SIGINT', () => {
+      throw new ProjectError('User interrupted the process', errorPath);
+    });
 
-    const projectType = await promptForProjectType(templateList);
-    const packageManager = await promptForPackageManager(availablePackageManagers);
-    const gitInit = await promptForGitInit();
-    const confirm = await promptForConfirmation(projectName, projectType, packageManager, gitInit);
+    const gitInfo = await system.checkForGitInstallation();
+    const availablePackageManagers = await system.getAvailablePackageManagers();
+    const templateList = await system.getTemplateList();
 
+    const projectType = await prompts.getProjectType(templateList);
+    const packageManager = await prompts.getPackageManager(availablePackageManagers);
+    const gitInit = await prompts.getGitInit();
+    const confirm = await prompts.getConfirmation(
+      projectName,
+      projectType,
+      packageManager,
+      gitInit,
+    );
     if (!confirm) {
-      sayGoodbye();
+      system.sayGoodbye();
       return;
     }
 
-    await cloneTemplate(projectType, projectName);
-    await cleanupTemplate(projectName, packageManager, gitInit);
-    await installDependencies(projectName, packageManager, gitInit);
+    await system.cloneTemplate(projectType, projectName);
+    await system.cleanupTemplate(projectName, projectPath, packageManager, gitInfo);
+    await system.installDependencies(projectName, packageManager);
+    await system.initializeGitRepository(gitInit);
 
-    sayGoodbye(projectName);
+    system.sayGoodbye(projectPath);
   } catch (error) {
-    throw new ProjectError((error as Error).message, projectName);
+    throw new ProjectError((error as Error).message, errorPath);
   }
 }
 
-await errorHandler(main);
+system.errorHandler(main);
