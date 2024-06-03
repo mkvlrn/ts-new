@@ -2,6 +2,8 @@ name: Publish to NPM registry
 
 on:
   workflow_run:
+    branches:
+      - main
     workflows: ['checks']
     types:
       - completed
