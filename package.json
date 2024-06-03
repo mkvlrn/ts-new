@@ -34,13 +34,13 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@mkvlrn/eslint-config": "^24.5.7",
-    "@mkvlrn/prettier-config": "^24.5.4",
-    "@swc-node/register": "1.9.0",
+    "@mkvlrn/eslint-config": "^24.6.0",
+    "@mkvlrn/prettier-config": "^24.6.1",
+    "@swc-node/register": "1.9.1",
     "@swc/cli": "^0.3.12",
     "@swc/core": "^1.5.24",
     "@swc/types": "^0.1.7",
-    "@types/node": "^20.12.13",
+    "@types/node": "^20.14.0",
     "@vitest/coverage-v8": "^1.6.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.5",
@@ -50,7 +50,7 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
-    "@inquirer/prompts": "^5.0.4",
+    "@inquirer/prompts": "^5.0.5",
     "chalk": "^5.3.0",
     "ora": "^8.0.1"
   }
