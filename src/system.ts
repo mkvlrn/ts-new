@@ -136,7 +136,9 @@ async function cleanupTemplate(
     await unlink(path.resolve(projectPath, '.github', 'dependabot.yml'));
     await unlink(path.resolve(projectPath, 'readme.md'));
     await unlink(path.resolve(projectPath, 'sonar-project.properties'));
-    await unlink(path.resolve(projectPath, 'yarn.lock'));
+    await unlink(path.resolve(projectPath, 'package-lock.json')).catch(() => ({}));
+    await unlink(path.resolve(projectPath, 'yarn.lock')).catch(() => ({}));
+    await unlink(path.resolve(projectPath, 'pnpm-lock.yaml')).catch(() => ({}));
 
     // remove extraneous lines from ci workflow
     const ciWorkflowPath = path.resolve(projectPath, '.github', 'workflows', 'checks.yml');
