@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import chalk from 'chalk';
 import ora from 'ora';
-import { ProjectError } from '#/project-error.ts';
+import { ProjectError } from '~/project-error.ts';
 
 const exec: (
   command: string,
