@@ -1,6 +1,6 @@
 import { ProjectError } from '#/project-error.ts';
-import prompts from '#/prompts.ts';
-import system from '#/system.ts';
+import { prompts } from '#/prompts.ts';
+import { system } from '#/system.ts';
 
 async function main(): Promise<void> {
   let errorPath = '';
@@ -44,4 +44,4 @@ async function main(): Promise<void> {
   }
 }
 
-system.errorHandler(main);
+await system.errorHandler(main);

@@ -28,7 +28,7 @@ async function getProjectType(templateList: GithubRepoResponse[]): Promise<strin
   const answer = await select({
     message: chalk.dim.yellow('Project type'),
     choices: templateList.map((template) => ({
-      name: `${template.name.split('-').pop()} (${template.description})`,
+      name: `${template.name.split('-').pop() ?? `Unknown`} (${template.description})`,
       value: template.name,
     })),
   });
@@ -67,10 +67,10 @@ async function getConfirmation(
   packageManager: string,
   gitInit: boolean,
 ): Promise<boolean> {
-  const highlightType = `${chalk.redBright(projectType.split('-').pop())}`;
-  const highlightProject = `${chalk.redBright(`./${projectName}`)}`;
-  const highlightManager = `${chalk.redBright(packageManager)}`;
-  const highlightGitInit = `${chalk.redBright(gitInit ? '' : 'not ')}`;
+  const highlightType = chalk.redBright(projectType.split('-').pop());
+  const highlightProject = chalk.redBright(`./${projectName}`);
+  const highlightManager = chalk.redBright(packageManager);
+  const highlightGitInit = chalk.redBright(gitInit ? '' : 'not ');
   const message = `This will create a ${highlightType} project in ${highlightProject} using ${highlightManager} and a git repository will ${highlightGitInit}be initialized.`;
 
   const answer = await select({
@@ -84,7 +84,7 @@ async function getConfirmation(
   return answer;
 }
 
-export default {
+export const prompts = {
   getProjectName,
   getProjectType,
   getPackageManager,

@@ -150,7 +150,7 @@ async function cleanupTemplate(
     await writeFile(ciWorkflowPath, ciWorkflowLines.splice(0, testCovIndex + 1).join('\n') + '\n');
 
     // replace package manage in husky hooks with the one selected
-    const newPackageManager = packageManager === `npm` ? 'npx' : `${packageManager}`;
+    const newPackageManager = packageManager === `npm` ? 'npx' : packageManager;
     const huskyPath = path.resolve(projectPath, '.husky');
     const preCommitContents = `${newPackageManager} tsc --noemit\n${newPackageManager} lint-staged\n${newPackageManager} vitest --run\n`;
     await writeFile(path.resolve(huskyPath, 'pre-commit'), preCommitContents);
@@ -220,7 +220,7 @@ async function errorHandler(main: () => Promise<void>): Promise<void> {
   }
 }
 
-export default {
+export const system = {
   sayHello,
   sayGoodbye,
   checkForGitInstallation,
