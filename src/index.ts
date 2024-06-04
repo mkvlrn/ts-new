@@ -1,9 +1,14 @@
+#!/usr/bin/env node
 import { ProjectError } from '#/project-error.ts';
 import { prompts } from '#/prompts.ts';
 import { system } from '#/system.ts';
 
 async function main(): Promise<void> {
   let errorPath = '';
+
+  process.on('SIGINT', () => {
+    throw new ProjectError('User interrupted the process', errorPath);
+  });
 
   try {
     await system.sayHello();
