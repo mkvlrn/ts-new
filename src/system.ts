@@ -183,14 +183,12 @@ async function rollbackChanges(projectPath: string): Promise<void> {
   let needsRollback = false;
 
   if (projectPath !== '') {
-    needsRollback = true;
-  }
-
-  try {
-    await access(projectPath);
-    needsRollback = true;
-  } catch {
-    // ignore
+    try {
+      await access(projectPath);
+      needsRollback = true;
+    } catch {
+      // ignore
+    }
   }
 
   if (needsRollback) {
@@ -206,10 +204,6 @@ async function rollbackChanges(projectPath: string): Promise<void> {
       );
     }
   }
-
-  sayGoodbye(null);
-  // eslint-disable-next-line unicorn/no-process-exit
-  process.exit(0);
 }
 
 function handleError(error: unknown, projectPath: string): void {
@@ -222,7 +216,15 @@ function handleError(error: unknown, projectPath: string): void {
 
   // eslint-disable-next-line no-console
   console.error(`\n${preMessage} ${message}`);
-  rollbackChanges(projectPath).catch(() => ({}));
+  rollbackChanges(projectPath)
+    .then(() => {
+      sayGoodbye(null);
+      // eslint-disable-next-line unicorn/no-process-exit
+      process.exit(0);
+    })
+    .catch(() => {
+      console.log('failed to roll back changes');
+    });
 }
 
 export const system = {
