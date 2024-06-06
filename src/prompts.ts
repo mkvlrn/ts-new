@@ -13,9 +13,12 @@ async function getProjectName(): Promise<[string, string]> {
         return 'Please enter a valid directory name for your project.';
       }
 
-      await access(projectName).catch(() => 'A directory with this name already exists.');
-
-      return true;
+      try {
+        await access(projectName);
+        return 'A directory with this name already exists.';
+      } catch {
+        return true;
+      }
     },
   });
 

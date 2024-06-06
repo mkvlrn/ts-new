@@ -1,11 +1,12 @@
-import { exec as _exec } from 'node:child_process';
-import { readFile, rm, unlink, writeFile } from 'node:fs/promises';
+import { exec as _exec, execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { access, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import { ExitPromptError } from '@inquirer/core';
 import chalk from 'chalk';
 import ora from 'ora';
-import { ProjectError } from '~/project-error.ts';
 
 const exec: (
   command: string,
@@ -14,10 +15,10 @@ const exec: (
 
 const spinner = ora();
 
-async function sayHello(): Promise<void> {
+function sayHello(): void {
   const packageDirectory = path.resolve(path.dirname(fileURLToPath(new URL(import.meta.url))));
   const packageJsonPath = path.resolve(packageDirectory, '../package.json');
-  const packageJsonFile = await readFile(packageJsonPath, 'utf8');
+  const packageJsonFile = readFileSync(packageJsonPath, 'utf8');
   const packageJsonContents = JSON.parse(packageJsonFile) as { name: string; version: string };
   const thisProject = chalk.cyanBright.bold(packageJsonContents.name);
   const version = chalk.greenBright.bold(packageJsonContents.version);
@@ -48,17 +49,10 @@ async function checkForGitInstallation(): Promise<string | null> {
     spinner.start('checking for git installation');
     await exec('git --version', { stdio: 'ignore' });
 
-    const gitName = await exec('git config user.name', { stdio: 'ignore' }).catch(() => ({
-      stdout: '',
-    }));
-    const gitEmail = await exec('git config user.email', { stdio: 'ignore' }).catch(() => ({
-      stdout: '',
-    }));
+    const gitName = execSync('git config user.name').toString().trim();
+    const gitEmail = execSync('git config user.email').toString().trim();
 
-    const gitInfo =
-      !gitName.stdout.trim() || !gitEmail.stdout.trim()
-        ? null
-        : `${gitName.stdout.trim()} <${gitEmail.stdout.trim()}>`;
+    const gitInfo = !gitName || !gitEmail ? null : `${gitName} <${gitEmail}>`;
 
     spinner.succeed();
 
@@ -74,7 +68,7 @@ async function getAvailablePackageManagers(): Promise<string[]> {
 
   try {
     spinner.start('checking for available package managers');
-    for await (const pm of ['npm', 'yarn', 'pnpm']) {
+    for (const pm of ['npm', 'yarn', 'pnpm']) {
       try {
         await exec(`${pm} --version`, { stdio: 'ignore' });
         availablePackageManagers.push(pm);
@@ -123,48 +117,34 @@ async function cloneTemplate(templateName: string, projectName: string): Promise
 async function cleanupTemplate(
   projectName: string,
   projectPath: string,
-  packageManager: string,
   gitInfo: string | null,
 ): Promise<void> {
   try {
     spinner.start('cleaning up template');
 
-    // remove .git folder
-    await rm(path.resolve(projectPath, '.git'), { recursive: true, force: true });
-
-    // remove extraneous files
-    await unlink(path.resolve(projectPath, '.github', 'dependabot.yml'));
-    await unlink(path.resolve(projectPath, 'readme.md'));
-    await unlink(path.resolve(projectPath, 'sonar-project.properties'));
-    await unlink(path.resolve(projectPath, 'package-lock.json')).catch(() => ({}));
-    await unlink(path.resolve(projectPath, 'yarn.lock')).catch(() => ({}));
-    await unlink(path.resolve(projectPath, 'pnpm-lock.yaml')).catch(() => ({}));
-
-    // remove extraneous lines from ci workflow
-    const ciWorkflowPath = path.resolve(projectPath, '.github', 'workflows', 'checks.yml');
-    const ciWorkflowFile = await readFile(ciWorkflowPath, 'utf8');
-    // eslint-disable-next-line prefer-const
-    let ciWorkflowLines = ciWorkflowFile.split('\n');
-    const testCovIndex = ciWorkflowLines.findIndex((line) => line.includes('test:cov'));
-    ciWorkflowLines[testCovIndex] = ciWorkflowLines[testCovIndex].replace('test:cov', 'test');
-    await writeFile(ciWorkflowPath, ciWorkflowLines.splice(0, testCovIndex + 1).join('\n') + '\n');
-
-    // replace package manage in husky hooks with the one selected
-    const newPackageManager = packageManager === `npm` ? 'npx' : packageManager;
-    const huskyPath = path.resolve(projectPath, '.husky');
-    const preCommitContents = `${newPackageManager} tsc --noemit\n${newPackageManager} lint-staged\n${newPackageManager} vitest --run\n`;
-    await writeFile(path.resolve(huskyPath, 'pre-commit'), preCommitContents);
-    const commitMessageContents = `${newPackageManager} commitlint --edit $1\n`;
-    await writeFile(path.resolve(huskyPath, 'commit-msg'), commitMessageContents);
+    // remove extraneous folders and files
+    try {
+      await rm(path.resolve(projectPath, '.git'), { recursive: true, force: true });
+      await rm(path.resolve(projectPath, '.github', 'dependabot.yml'), { force: true });
+      await rm(path.resolve(projectPath, '.github', 'workflows', 'sonar.yml'), { force: true });
+      await rm(path.resolve(projectPath, 'readme.md'), { force: true });
+      await rm(path.resolve(projectPath, 'sonar-project.properties'), { force: true });
+      await rm(path.resolve(projectPath, 'package-lock.json'), { force: true });
+      await rm(path.resolve(projectPath, 'yarn.lock'), { force: true });
+      await rm(path.resolve(projectPath, 'pnpm-lock.yaml'), { force: true });
+    } catch {
+      // ignore
+    }
 
     // update package.json
-    await exec(`npm pkg set name="${projectName}"`, { stdio: 'ignore', cwd: projectPath });
-    await exec(`npm pkg set description="${projectName}"`, { stdio: 'ignore', cwd: projectPath });
+    const execOptions: ExecOptions = { stdio: 'ignore', cwd: projectPath };
+    await exec(`npm pkg set name="${projectName}"`, execOptions);
+    await exec(`npm pkg set description="${projectName}"`, execOptions);
     if (!gitInfo) {
-      await exec(`npm pkg delete author`, { stdio: 'ignore', cwd: projectPath });
+      await exec(`npm pkg delete author`, execOptions);
     }
-    await exec('npm pkg delete repository', { stdio: 'ignore', cwd: projectPath });
-    await exec('npm pkg delete keywords ', { stdio: 'ignore', cwd: projectPath });
+    await exec('npm pkg delete repository', execOptions);
+    await exec('npm pkg delete keywords ', execOptions);
 
     spinner.succeed();
   } catch (error) {
@@ -184,14 +164,14 @@ async function installDependencies(projectPath: string, packageManager: string):
   }
 }
 
-async function initializeGitRepository(gitInit: boolean): Promise<void> {
+async function initializeGitRepository(gitInit: boolean, projectPath: string): Promise<void> {
   if (!gitInit) {
     return;
   }
 
   try {
     spinner.start('initializing git repository');
-    await exec('git init', { stdio: 'ignore' });
+    await exec('git init', { stdio: 'ignore', cwd: projectPath });
     spinner.succeed();
   } catch (error) {
     spinner.fail();
@@ -199,25 +179,50 @@ async function initializeGitRepository(gitInit: boolean): Promise<void> {
   }
 }
 
-async function errorHandler(main: () => Promise<void>): Promise<void> {
-  try {
-    await main();
-  } catch (error) {
-    if (error instanceof ProjectError) {
-      const { message, projectPath } = error;
-      const preMessage = chalk.redBright.bold('an error occurred:');
-      // eslint-disable-next-line no-console
-      console.error(`${preMessage} ${message}`);
+async function rollbackChanges(projectPath: string): Promise<void> {
+  let needsRollback = false;
 
+  if (projectPath !== '') {
+    needsRollback = true;
+  }
+
+  try {
+    await access(projectPath);
+    needsRollback = true;
+  } catch {
+    // ignore
+  }
+
+  if (needsRollback) {
+    try {
       spinner.start('rolling back changes');
       await rm(projectPath, { recursive: true, force: true });
       spinner.succeed();
-      sayGoodbye(false);
+    } catch (error) {
+      spinner.fail();
+      // eslint-disable-next-line no-console
+      console.error(
+        `failed to roll back changes (${(error as Error).message}), you may need to manually remove the project`,
+      );
     }
-
-    // eslint-disable-next-line unicorn/no-process-exit
-    process.exit(1);
   }
+
+  sayGoodbye(null);
+  // eslint-disable-next-line unicorn/no-process-exit
+  process.exit(0);
+}
+
+function handleError(error: unknown, projectPath: string): void {
+  const preMessage = chalk.redBright.bold('an error occurred:');
+  let message = (error as Error).message;
+
+  if (error instanceof ExitPromptError) {
+    message = 'user interrupted';
+  }
+
+  // eslint-disable-next-line no-console
+  console.error(`\n${preMessage} ${message}`);
+  rollbackChanges(projectPath).catch(() => ({}));
 }
 
 export const system = {
@@ -230,5 +235,5 @@ export const system = {
   cleanupTemplate,
   installDependencies,
   initializeGitRepository,
-  errorHandler,
+  handleError,
 };
