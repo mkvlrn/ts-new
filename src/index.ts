@@ -1,5 +1,8 @@
 #!/usr/bin/env node
+import { exec, spinner } from '~/injection.ts';
+import { local } from '~/local.ts';
 import { prompts } from '~/prompts.ts';
+import { remote } from '~/remote.ts';
 import { system } from '~/system.ts';
 
 let errorPath = '';
@@ -10,14 +13,21 @@ try {
   const [projectName, projectPath] = await prompts.getProjectName();
   errorPath = projectPath;
 
-  const gitInfo = await system.checkForGitInstallation();
-  const availablePackageManagers = await system.getAvailablePackageManagers();
-  const templateList = await system.getTemplateList();
+  const gitInfo = await local.gitInfo(spinner, exec);
+  const packageManagers = await local.packageManagers(spinner, exec);
+  const templateList = await remote.templateList(spinner);
 
   const projectType = await prompts.getProjectType(templateList);
-  const packageManager = await prompts.getPackageManager(availablePackageManagers);
-  const gitInit = await prompts.getGitInit();
-  const confirm = await prompts.getConfirmation(projectName, projectType, packageManager, gitInit);
+  const installPackages = await prompts.getInstallPackages();
+  const packageManager = await prompts.getPackageManager(packageManagers, installPackages);
+  const gitInit = await prompts.getGitInit(gitInfo);
+  const confirm = await prompts.getConfirmation(
+    projectName,
+    projectType,
+    installPackages,
+    packageManager,
+    gitInit,
+  );
 
   if (!confirm) {
     system.sayGoodbye();
@@ -25,15 +35,15 @@ try {
   }
 
   process.on('SIGINT', () => {
-    system.handleError(new Error('user interrupted'), errorPath);
+    system.handleError(spinner, new Error('user interrupted'), errorPath);
   });
 
-  await system.cloneTemplate(projectType, projectName);
-  await system.cleanupTemplate(projectName, projectPath, gitInfo);
-  await system.installDependencies(projectName, packageManager);
-  await system.initializeGitRepository(gitInit, projectPath);
+  await remote.fetchRepo(spinner, projectType, projectName);
+  await system.cleanupTemplate(spinner, exec, projectName, projectPath, gitInit, gitInfo);
+  await system.installDependencies(spinner, exec, projectName, installPackages, packageManager);
+  await system.initializeGitRepository(spinner, exec, gitInit, projectPath);
 
   system.sayGoodbye(projectPath);
 } catch (error) {
-  system.handleError(error, errorPath);
+  system.handleError(spinner, error, errorPath);
 }

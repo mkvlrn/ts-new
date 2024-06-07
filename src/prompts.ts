@@ -2,6 +2,7 @@ import { access } from 'node:fs/promises';
 import path from 'node:path';
 import { input, select } from '@inquirer/prompts';
 import chalk from 'chalk';
+import { GithubRepoResponse, PackageManager } from '~/types.ts';
 
 async function getProjectName(): Promise<[string, string]> {
   const projectName = await input({
@@ -39,10 +40,32 @@ async function getProjectType(templateList: GithubRepoResponse[]): Promise<strin
   return answer;
 }
 
-async function getPackageManager(availablePackageManagers: string[]): Promise<string> {
+async function getInstallPackages(): Promise<boolean> {
+  const answer = await select({
+    message: chalk.dim.yellow('Install packages?'),
+    choices: [
+      { value: true, name: 'Yes' },
+      { value: false, name: 'No' },
+    ],
+  });
+
+  return answer;
+}
+
+async function getPackageManager(
+  availablePackageManagers: PackageManager[],
+  installPackages: boolean,
+): Promise<PackageManager> {
+  if (!installPackages) {
+    // eslint-disable-next-line no-console
+    console.log(chalk.dim.yellow('Skipping package manager selection.'));
+    return 'npm';
+  }
+
+  const knownPackageManagers: PackageManager[] = ['npm', 'yarn', 'pnpm'];
   const answer = await select({
     message: chalk.dim.yellow('Package manager'),
-    choices: ['npm', 'yarn', 'pnpm'].map((packageManager) => ({
+    choices: knownPackageManagers.map((packageManager) => ({
       value: packageManager,
       name: packageManager,
       disabled: availablePackageManagers.includes(packageManager) ? false : 'not available',
@@ -52,7 +75,13 @@ async function getPackageManager(availablePackageManagers: string[]): Promise<st
   return answer;
 }
 
-async function getGitInit(): Promise<boolean> {
+async function getGitInit(gitInfo: string | null): Promise<boolean> {
+  if (gitInfo === null) {
+    // eslint-disable-next-line no-console
+    console.info(chalk.dim.yellow('Git not installed/found in PATH. Skipping git initialization.'));
+    return false;
+  }
+
   const answer = await select({
     message: chalk.dim.yellow('Initialize git and create first commit ?'),
     choices: [
@@ -67,14 +96,20 @@ async function getGitInit(): Promise<boolean> {
 async function getConfirmation(
   projectName: string,
   projectType: string,
+  installPackages: boolean,
   packageManager: string,
   gitInit: boolean,
 ): Promise<boolean> {
   const highlightType = chalk.redBright(projectType.split('-').pop());
   const highlightProject = chalk.redBright(`./${projectName}`);
-  const highlightManager = chalk.redBright(packageManager);
+  let highlightPackageInstallation = '';
+  highlightPackageInstallation = installPackages
+    ? chalk.redBright(`be installed with ${packageManager}`)
+    : chalk.redBright(`not be installed`);
   const highlightGitInit = chalk.redBright(gitInit ? '' : 'not ');
-  const message = `This will create a ${highlightType} project in ${highlightProject} using ${highlightManager} and a git repository will ${highlightGitInit}be initialized.`;
+  let message = `This will create a ${highlightType} project in ${highlightProject}, `;
+  message += `packages will ${highlightPackageInstallation}, and a git repository will `;
+  message += `${highlightGitInit}be initialized.`;
 
   const answer = await select({
     message: chalk.dim.yellow(`${message} Continue?`),
@@ -90,6 +125,7 @@ async function getConfirmation(
 export const prompts = {
   getProjectName,
   getProjectType,
+  getInstallPackages,
   getPackageManager,
   getGitInit,
   getConfirmation,
