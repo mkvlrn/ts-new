@@ -1,10 +1,10 @@
 import { rename, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import AdmZip from 'adm-zip';
-import { Ora } from 'ora';
+import { spinner } from '~/injection.ts';
 import { GithubRepoResponse } from '~/types.ts';
 
-async function templateList(spinner: Ora): Promise<GithubRepoResponse[]> {
+async function templateList(): Promise<GithubRepoResponse[]> {
   try {
     spinner.start('fetching template list');
     const response = await fetch('https://api.github.com/users/mkvlrn/repos?type=public');
@@ -18,7 +18,7 @@ async function templateList(spinner: Ora): Promise<GithubRepoResponse[]> {
   }
 }
 
-async function fetchRepo(spinner: Ora, templateName: string, projectName: string): Promise<void> {
+async function fetchRepo(templateName: string, projectName: string): Promise<void> {
   try {
     spinner.start('fetching template');
     const response = await fetch(`https://api.github.com/repos/mkvlrn/${templateName}/zipball`);

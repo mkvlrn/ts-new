@@ -4,8 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ExitPromptError } from '@inquirer/core';
 import chalk from 'chalk';
-import { Ora } from 'ora';
-import { Exec, ExecOptions } from '~/types.ts';
+import { exec, spinner } from '~/injection.ts';
+import { ExecOptions } from '~/types.ts';
 
 function sayHello(): void {
   const packageDirectory = path.resolve(path.dirname(fileURLToPath(new URL(import.meta.url))));
@@ -37,8 +37,6 @@ function sayGoodbye(projectPath: string | false | null = null): void {
 }
 
 async function cleanupTemplate(
-  spinner: Ora,
-  exec: Exec,
   projectName: string,
   projectPath: string,
   gitInit: boolean,
@@ -81,8 +79,6 @@ async function cleanupTemplate(
 }
 
 async function installDependencies(
-  spinner: Ora,
-  exec: Exec,
   projectPath: string,
   installPackages: boolean,
   packageManager: string,
@@ -101,12 +97,7 @@ async function installDependencies(
   }
 }
 
-async function initializeGitRepository(
-  spinner: Ora,
-  exec: Exec,
-  gitInit: boolean,
-  projectPath: string,
-): Promise<void> {
+async function initializeGitRepository(gitInit: boolean, projectPath: string): Promise<void> {
   if (!gitInit) {
     return;
   }
@@ -121,7 +112,7 @@ async function initializeGitRepository(
   }
 }
 
-async function rollbackChanges(spinner: Ora, projectPath: string): Promise<void> {
+async function rollbackChanges(projectPath: string): Promise<void> {
   let needsRollback = false;
 
   if (projectPath !== '') {
@@ -148,7 +139,7 @@ async function rollbackChanges(spinner: Ora, projectPath: string): Promise<void>
   }
 }
 
-function handleError(spinner: Ora, error: unknown, projectPath: string): void {
+function handleError(error: unknown, projectPath: string): void {
   const preMessage = chalk.redBright.bold('an error occurred:');
   let message = (error as Error).message;
 
@@ -158,7 +149,7 @@ function handleError(spinner: Ora, error: unknown, projectPath: string): void {
 
   // eslint-disable-next-line no-console
   console.error(`\n${preMessage} ${message}`);
-  rollbackChanges(spinner, projectPath)
+  rollbackChanges(projectPath)
     .then(() => {
       sayGoodbye(null);
       // eslint-disable-next-line unicorn/no-process-exit

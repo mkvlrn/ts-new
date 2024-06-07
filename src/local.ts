@@ -1,8 +1,8 @@
 import { execSync } from 'node:child_process';
-import { Ora } from 'ora';
-import { Exec, PackageManager } from '~/types.ts';
+import { exec, spinner } from '~/injection.ts';
+import { PackageManager } from '~/types.ts';
 
-async function gitInfo(spinner: Ora, exec: Exec): Promise<string | null> {
+async function gitInfo(): Promise<string | null> {
   try {
     spinner.start('checking for git installation');
     await exec('git --version', { stdio: 'ignore' });
@@ -21,7 +21,7 @@ async function gitInfo(spinner: Ora, exec: Exec): Promise<string | null> {
   }
 }
 
-async function packageManagers(spinner: Ora, exec: Exec): Promise<PackageManager[]> {
+async function packageManagers(): Promise<PackageManager[]> {
   const knownPackageManagers: PackageManager[] = ['npm', 'yarn', 'pnpm'];
   const availablePackageManagers: PackageManager[] = [];
 

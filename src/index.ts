@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { exec, spinner } from '~/injection.ts';
 import { local } from '~/local.ts';
 import { prompts } from '~/prompts.ts';
 import { remote } from '~/remote.ts';
@@ -13,9 +12,9 @@ try {
   const [projectName, projectPath] = await prompts.getProjectName();
   errorPath = projectPath;
 
-  const gitInfo = await local.gitInfo(spinner, exec);
-  const packageManagers = await local.packageManagers(spinner, exec);
-  const templateList = await remote.templateList(spinner);
+  const gitInfo = await local.gitInfo();
+  const packageManagers = await local.packageManagers();
+  const templateList = await remote.templateList();
 
   const projectType = await prompts.getProjectType(templateList);
   const installPackages = await prompts.getInstallPackages();
@@ -35,15 +34,15 @@ try {
   }
 
   process.on('SIGINT', () => {
-    system.handleError(spinner, new Error('user interrupted'), errorPath);
+    system.handleError(new Error('user interrupted'), errorPath);
   });
 
-  await remote.fetchRepo(spinner, projectType, projectName);
-  await system.cleanupTemplate(spinner, exec, projectName, projectPath, gitInit, gitInfo);
-  await system.installDependencies(spinner, exec, projectName, installPackages, packageManager);
-  await system.initializeGitRepository(spinner, exec, gitInit, projectPath);
+  await remote.fetchRepo(projectType, projectName);
+  await system.cleanupTemplate(projectName, projectPath, gitInit, gitInfo);
+  await system.installDependencies(projectName, installPackages, packageManager);
+  await system.initializeGitRepository(gitInit, projectPath);
 
   system.sayGoodbye(projectPath);
 } catch (error) {
-  system.handleError(spinner, error, errorPath);
+  system.handleError(error, errorPath);
 }

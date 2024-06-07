@@ -57,8 +57,6 @@ async function getPackageManager(
   installPackages: boolean,
 ): Promise<PackageManager> {
   if (!installPackages) {
-    // eslint-disable-next-line no-console
-    console.log(chalk.dim.yellow('Skipping package manager selection.'));
     return 'npm';
   }
 
@@ -77,8 +75,7 @@ async function getPackageManager(
 
 async function getGitInit(gitInfo: string | null): Promise<boolean> {
   if (gitInfo === null) {
-    // eslint-disable-next-line no-console
-    console.info(chalk.dim.yellow('Git not installed/found in PATH. Skipping git initialization.'));
+    console.info(chalk.dim.yellow('Skipping git initialization.'));
     return false;
   }
 
