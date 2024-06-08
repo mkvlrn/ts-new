@@ -7,21 +7,30 @@ import { GithubRepoResponse } from '~/types.ts';
 async function templateList(): Promise<GithubRepoResponse[]> {
   try {
     spinner.start('fetching template list');
-    const response = await fetch('https://api.github.com/users/mkvlrn/repos?type=public');
+    const response = await fetch(
+      'https://api.github.com/users/mkvlrn/repos?type=public',
+    );
     const repos = (await response.json()) as GithubRepoResponse[];
     spinner.succeed();
 
     return repos.filter((repo) => repo.is_template);
   } catch (error) {
     spinner.fail();
-    throw new Error(`failed to fetch template list (${(error as Error).message})`);
+    throw new Error(
+      `failed to fetch template list (${(error as Error).message})`,
+    );
   }
 }
 
-async function fetchRepo(templateName: string, projectName: string): Promise<void> {
+async function fetchRepo(
+  templateName: string,
+  projectName: string,
+): Promise<void> {
   try {
     spinner.start('fetching template');
-    const response = await fetch(`https://api.github.com/repos/mkvlrn/${templateName}/zipball`);
+    const response = await fetch(
+      `https://api.github.com/repos/mkvlrn/${templateName}/zipball`,
+    );
     const buffer = await response.arrayBuffer();
     const zipPath = path.join(process.cwd(), `${projectName}.zip`);
     await writeFile(zipPath, Buffer.from(buffer));

@@ -22,7 +22,11 @@ export interface GithubRepoResponse {
 }
 
 export interface ExecOptions extends _ExecOptions {
-  stdio?: 'pipe' | 'ignore' | 'inherit' | ('pipe' | 'ignore' | 'inherit' | null | number)[];
+  stdio?:
+    | 'pipe'
+    | 'ignore'
+    | 'inherit'
+    | ('pipe' | 'ignore' | 'inherit' | null | number)[];
 }
 
 export type Exec = (

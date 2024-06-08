@@ -28,7 +28,9 @@ async function getProjectName(): Promise<[string, string]> {
   return [projectName, projectPath];
 }
 
-async function getProjectType(templateList: GithubRepoResponse[]): Promise<string> {
+async function getProjectType(
+  templateList: GithubRepoResponse[],
+): Promise<string> {
   const answer = await select({
     message: chalk.dim.yellow('Project type'),
     choices: templateList.map((template) => ({
@@ -66,7 +68,9 @@ async function getPackageManager(
     choices: knownPackageManagers.map((packageManager) => ({
       value: packageManager,
       name: packageManager,
-      disabled: availablePackageManagers.includes(packageManager) ? false : 'not available',
+      disabled: availablePackageManagers.includes(packageManager)
+        ? false
+        : 'not available',
     })),
   });
 

@@ -41,7 +41,9 @@ async function packageManagers(): Promise<PackageManager[]> {
     spinner.succeed();
   } catch (error) {
     spinner.fail();
-    throw new Error(`failed to check for available package managers (${(error as Error).message})`);
+    throw new Error(
+      `failed to check for available package managers (${(error as Error).message})`,
+    );
   }
 
   return availablePackageManagers;

@@ -18,7 +18,10 @@ try {
 
   const projectType = await prompts.getProjectType(templateList);
   const installPackages = await prompts.getInstallPackages();
-  const packageManager = await prompts.getPackageManager(packageManagers, installPackages);
+  const packageManager = await prompts.getPackageManager(
+    packageManagers,
+    installPackages,
+  );
   const gitInit = await prompts.getGitInit(gitInfo);
   const confirm = await prompts.getConfirmation(
     projectName,
@@ -39,7 +42,11 @@ try {
 
   await remote.fetchRepo(projectType, projectName);
   await system.cleanupTemplate(projectName, projectPath, gitInit, gitInfo);
-  await system.installDependencies(projectName, installPackages, packageManager);
+  await system.installDependencies(
+    projectName,
+    installPackages,
+    packageManager,
+  );
   await system.initializeGitRepository(gitInit, projectPath);
 
   system.sayGoodbye(projectPath);
