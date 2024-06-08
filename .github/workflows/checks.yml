@@ -16,8 +16,8 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 20
-    - run: yarn install
-    - run: yarn tsc --noEmit
-    - run: yarn eslint src
-    - run: yarn prettier src --check
-    - run: yarn test
+    - run: npm install
+    - run: npx tsc --noEmit
+    - run: npx eslint src
+    - run: npx prettier src --check
+    - run: npm run test
