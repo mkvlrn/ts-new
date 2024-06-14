@@ -4,7 +4,7 @@ import { prompts } from '~/prompts.ts';
 import { remote } from '~/remote.ts';
 import { system } from '~/system.ts';
 
-let errorPath = '';
+let errorPath = ``;
 
 try {
   system.sayHello();
@@ -36,8 +36,8 @@ try {
     process.exit(0);
   }
 
-  process.on('SIGINT', () => {
-    system.handleError(new Error('user interrupted'), errorPath);
+  process.on(`SIGINT`, () => {
+    system.handleError(new Error(`user interrupted`), errorPath);
   });
 
   await remote.fetchRepo(projectType, projectName);

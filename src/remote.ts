@@ -6,9 +6,9 @@ import { GithubRepoResponse } from '~/types.ts';
 
 async function templateList(): Promise<GithubRepoResponse[]> {
   try {
-    spinner.start('fetching template list');
+    spinner.start(`fetching template list`);
     const response = await fetch(
-      'https://api.github.com/users/mkvlrn/repos?type=public',
+      `https://api.github.com/users/mkvlrn/repos?type=public`,
     );
     const repos = (await response.json()) as GithubRepoResponse[];
     spinner.succeed();
@@ -27,7 +27,7 @@ async function fetchRepo(
   projectName: string,
 ): Promise<void> {
   try {
-    spinner.start('fetching template');
+    spinner.start(`fetching template`);
     const response = await fetch(
       `https://api.github.com/repos/mkvlrn/${templateName}/zipball`,
     );

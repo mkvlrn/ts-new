@@ -3,7 +3,7 @@ import { ExecOptions as _ExecOptions } from 'node:child_process';
 export interface Yargs {
   name?: string;
 
-  template?: 'node' | 'nest' | 'vite' | 'next';
+  template?: `node` | `nest` | `vite` | `next`;
   install?: boolean;
   pacman?: PackageManager;
 
@@ -23,10 +23,10 @@ export interface GithubRepoResponse {
 
 export interface ExecOptions extends _ExecOptions {
   stdio?:
-    | 'pipe'
-    | 'ignore'
-    | 'inherit'
-    | ('pipe' | 'ignore' | 'inherit' | null | number)[];
+    | `pipe`
+    | `ignore`
+    | `inherit`
+    | (`pipe` | `ignore` | `inherit` | null | number)[];
 }
 
 export type Exec = (
@@ -37,4 +37,4 @@ export type Exec = (
   stderr: string;
 }>;
 
-export type PackageManager = 'npm' | 'yarn' | 'pnpm';
+export type PackageManager = `npm` | `yarn` | `pnpm`;

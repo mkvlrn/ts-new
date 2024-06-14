@@ -8,7 +8,6 @@ It attempts to provide a minimalistic setup with modern tools and practices with
 
 - Node.js 20+ - don't use anything lower than that, it's 2024
 - npm 10+ (npx should be used to run the CLI tool, but you can pick any package manager you want for the project itself)
-- Git - you should have it installed, if not, you're doing it wrong
 - A unix-like shell - if you're on Windows, you should use WSL2 or Git Bash
 
 ## usage

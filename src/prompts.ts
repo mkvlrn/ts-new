@@ -6,17 +6,17 @@ import { GithubRepoResponse, PackageManager } from '~/types.ts';
 
 async function getProjectName(): Promise<[string, string]> {
   const projectName = await input({
-    message: chalk.dim.yellow('Project name'),
-    default: 'my-project',
+    message: chalk.dim.yellow(`Project name`),
+    default: `my-project`,
     validate: async (projectName) => {
       const isValidFilename = /^[A-Za-z][\w.-]*$/g.test(projectName);
       if (!isValidFilename) {
-        return 'Please enter a valid directory name for your project.';
+        return `Please enter a valid directory name for your project.`;
       }
 
       try {
         await access(projectName);
-        return 'A directory with this name already exists.';
+        return `A directory with this name already exists.`;
       } catch {
         return true;
       }
@@ -32,9 +32,9 @@ async function getProjectType(
   templateList: GithubRepoResponse[],
 ): Promise<string> {
   const answer = await select({
-    message: chalk.dim.yellow('Project type'),
+    message: chalk.dim.yellow(`Project type`),
     choices: templateList.map((template) => ({
-      name: `${template.name.split('-').pop() ?? `Unknown`} (${template.description})`,
+      name: `${template.name.split(`-`).pop() ?? `Unknown`} (${template.description})`,
       value: template.name,
     })),
   });
@@ -44,10 +44,10 @@ async function getProjectType(
 
 async function getInstallPackages(): Promise<boolean> {
   const answer = await select({
-    message: chalk.dim.yellow('Install packages?'),
+    message: chalk.dim.yellow(`Install packages?`),
     choices: [
-      { value: true, name: 'Yes' },
-      { value: false, name: 'No' },
+      { value: true, name: `Yes` },
+      { value: false, name: `No` },
     ],
   });
 
@@ -59,18 +59,18 @@ async function getPackageManager(
   installPackages: boolean,
 ): Promise<PackageManager> {
   if (!installPackages) {
-    return 'npm';
+    return `npm`;
   }
 
-  const knownPackageManagers: PackageManager[] = ['npm', 'yarn', 'pnpm'];
+  const knownPackageManagers: PackageManager[] = [`npm`, `yarn`, `pnpm`];
   const answer = await select({
-    message: chalk.dim.yellow('Package manager'),
+    message: chalk.dim.yellow(`Package manager`),
     choices: knownPackageManagers.map((packageManager) => ({
       value: packageManager,
       name: packageManager,
       disabled: availablePackageManagers.includes(packageManager)
         ? false
-        : 'not available',
+        : `not available`,
     })),
   });
 
@@ -79,15 +79,15 @@ async function getPackageManager(
 
 async function getGitInit(gitInfo: string | null): Promise<boolean> {
   if (gitInfo === null) {
-    console.info(chalk.dim.yellow('Skipping git initialization.'));
+    console.info(chalk.dim.yellow(`Skipping git initialization.`));
     return false;
   }
 
   const answer = await select({
-    message: chalk.dim.yellow('Initialize git and create first commit ?'),
+    message: chalk.dim.yellow(`Initialize git and create first commit ?`),
     choices: [
-      { value: true, name: 'Yes' },
-      { value: false, name: 'No' },
+      { value: true, name: `Yes` },
+      { value: false, name: `No` },
     ],
   });
 
@@ -101,13 +101,13 @@ async function getConfirmation(
   packageManager: string,
   gitInit: boolean,
 ): Promise<boolean> {
-  const highlightType = chalk.redBright(projectType.split('-').pop());
+  const highlightType = chalk.redBright(projectType.split(`-`).pop());
   const highlightProject = chalk.redBright(`./${projectName}`);
-  let highlightPackageInstallation = '';
+  let highlightPackageInstallation = ``;
   highlightPackageInstallation = installPackages
     ? chalk.redBright(`be installed with ${packageManager}`)
     : chalk.redBright(`not be installed`);
-  const highlightGitInit = chalk.redBright(gitInit ? '' : 'not ');
+  const highlightGitInit = chalk.redBright(gitInit ? `` : `not `);
   let message = `This will create a ${highlightType} project in ${highlightProject}, `;
   message += `packages will ${highlightPackageInstallation}, and a git repository will `;
   message += `${highlightGitInit}be initialized.`;
@@ -115,8 +115,8 @@ async function getConfirmation(
   const answer = await select({
     message: chalk.dim.yellow(`${message} Continue?`),
     choices: [
-      { value: true, name: 'Yes' },
-      { value: false, name: 'No' },
+      { value: true, name: `Yes` },
+      { value: false, name: `No` },
     ],
   });
 
