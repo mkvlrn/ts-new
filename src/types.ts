@@ -1,17 +1,5 @@
 import { ExecOptions as _ExecOptions } from 'node:child_process';
 
-export interface Yargs {
-  name?: string;
-
-  template?: `node` | `nest` | `vite` | `next`;
-  install?: boolean;
-  pacman?: PackageManager;
-
-  git?: boolean;
-
-  yes?: boolean;
-}
-
 export interface GithubRepoResponse {
   name: string;
   full_name: string;
