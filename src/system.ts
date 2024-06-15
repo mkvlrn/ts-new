@@ -126,8 +126,13 @@ async function initializeGitRepository(
   }
 
   try {
-    spinner.start(`initializing git repository`);
+    spinner.start(`initializing git repository and committing`);
     await exec(`git init`, { stdio: `ignore`, cwd: projectPath });
+    await exec(`git add .`, { stdio: `ignore`, cwd: projectPath });
+    await exec(`git commit -m "initial commit"`, {
+      stdio: `ignore`,
+      cwd: projectPath,
+    });
     spinner.succeed();
   } catch (error) {
     spinner.fail();
