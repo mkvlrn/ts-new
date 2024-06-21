@@ -127,6 +127,7 @@ async function initializeGitRepository(
       stdio: "ignore",
       cwd: projectPath,
     });
+    await exec("npm run prepare", { stdio: "ignore", cwd: projectPath });
     spinner.succeed();
   } catch (error) {
     spinner.fail();
