@@ -1,7 +1,7 @@
-import { exec as _exec } from 'node:child_process';
-import { promisify } from 'node:util';
-import ora from 'ora';
-import { ExecOptions } from '~/types.ts';
+import { exec as _exec } from "node:child_process";
+import { promisify } from "node:util";
+import ora from "ora";
+import { ExecOptions } from "~/types.ts";
 
 export const exec: (
   command: string,

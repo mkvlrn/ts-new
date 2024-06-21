@@ -1,18 +1,18 @@
-import { readFileSync } from 'node:fs';
-import { access, rm } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { ExitPromptError } from '@inquirer/core';
-import chalk from 'chalk';
-import { exec, spinner } from '~/injection.ts';
-import { ExecOptions } from '~/types.ts';
+import { readFileSync } from "node:fs";
+import { access, rm } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { ExitPromptError } from "@inquirer/core";
+import chalk from "chalk";
+import { exec, spinner } from "~/injection.ts";
+import { ExecOptions } from "~/types.ts";
 
 function sayHello(): void {
   const packageDirectory = path.resolve(
     path.dirname(fileURLToPath(new URL(import.meta.url))),
   );
-  const packageJsonPath = path.resolve(packageDirectory, `../package.json`);
-  const packageJsonFile = readFileSync(packageJsonPath, `utf8`);
+  const packageJsonPath = path.resolve(packageDirectory, "../package.json");
+  const packageJsonFile = readFileSync(packageJsonPath, "utf8");
   const packageJsonContents = JSON.parse(packageJsonFile) as {
     name: string;
     version: string;
@@ -27,21 +27,19 @@ function sayHello(): void {
 function sayGoodbye(projectPath: string | false | null = null): void {
   if (projectPath === null) {
     // eslint-disable-next-line no-console
-    console.info(chalk.cyanBright(`👋 Goodbye!`));
+    console.info(chalk.cyanBright("👋 Goodbye!"));
     return;
   }
 
   if (projectPath === false) {
     // eslint-disable-next-line no-console
-    console.info(chalk.cyanBright(`👋 Goodbye. 😞`));
+    console.info(chalk.cyanBright("👋 Goodbye. 😞"));
     return;
   }
 
   // eslint-disable-next-line no-console
   console.info(
-    chalk.cyanBright(
-      `🚀 Your project is ready at ${chalk.yellowBright(projectPath)}`,
-    ),
+    chalk.cyanBright(`🚀 Your project is ready at ${chalk.yellowBright(projectPath)}`),
   );
 }
 
@@ -52,44 +50,42 @@ async function cleanupTemplate(
   gitInfo: string | null,
 ): Promise<void> {
   try {
-    spinner.start(`cleaning up template`);
+    spinner.start("cleaning up template");
 
     // remove extraneous files
     try {
-      await rm(path.resolve(projectPath, `.github`, `dependabot.yml`), {
+      await rm(path.resolve(projectPath, ".github", "dependabot.yml"), {
         force: true,
       });
-      await rm(path.resolve(projectPath, `.github`, `workflows`, `sonar.yml`), {
+      await rm(path.resolve(projectPath, ".github", "workflows", "sonar.yml"), {
         force: true,
       });
-      await rm(path.resolve(projectPath, `readme.md`), { force: true });
-      await rm(path.resolve(projectPath, `package-lock.json`), { force: true });
-      await rm(path.resolve(projectPath, `yarn.lock`), { force: true });
-      await rm(path.resolve(projectPath, `pnpm-lock.yaml`), { force: true });
+      await rm(path.resolve(projectPath, "readme.md"), { force: true });
+      await rm(path.resolve(projectPath, "package-lock.json"), { force: true });
+      await rm(path.resolve(projectPath, "yarn.lock"), { force: true });
+      await rm(path.resolve(projectPath, "pnpm-lock.yaml"), { force: true });
     } catch {
       // ignore
     }
 
     // update package.json
-    const execOptions: ExecOptions = { stdio: `ignore`, cwd: projectPath };
+    const execOptions: ExecOptions = { stdio: "ignore", cwd: projectPath };
     await exec(`npm pkg set name="${projectName}"`, execOptions);
     await exec(`npm pkg set description="${projectName}"`, execOptions);
     if (gitInit) {
       await (gitInfo
         ? exec(`npm pkg set author="${gitInfo}"`, execOptions)
-        : exec(`npm pkg delete author`, execOptions));
+        : exec("npm pkg delete author", execOptions));
     } else {
-      await exec(`npm pkg delete author`, execOptions);
+      await exec("npm pkg delete author", execOptions);
     }
-    await exec(`npm pkg delete repository`, execOptions);
-    await exec(`npm pkg delete keywords `, execOptions);
+    await exec("npm pkg delete repository", execOptions);
+    await exec("npm pkg delete keywords ", execOptions);
 
     spinner.succeed();
   } catch (error) {
     spinner.fail();
-    throw new Error(
-      `failed to clean up template (${(error as Error).message})`,
-    );
+    throw new Error(`failed to clean up template (${(error as Error).message})`);
   }
 }
 
@@ -105,15 +101,13 @@ async function installDependencies(
   try {
     spinner.start(`installing dependencies using ${packageManager}`);
     await exec(`${packageManager} install`, {
-      stdio: `ignore`,
+      stdio: "ignore",
       cwd: projectPath,
     });
     spinner.succeed();
   } catch (error) {
     spinner.fail();
-    throw new Error(
-      `failed to install dependencies (${(error as Error).message})`,
-    );
+    throw new Error(`failed to install dependencies (${(error as Error).message})`);
   }
 }
 
@@ -126,26 +120,24 @@ async function initializeGitRepository(
   }
 
   try {
-    spinner.start(`initializing git repository and committing`);
-    await exec(`git init`, { stdio: `ignore`, cwd: projectPath });
-    await exec(`git add .`, { stdio: `ignore`, cwd: projectPath });
-    await exec(`git commit -m "initial commit"`, {
-      stdio: `ignore`,
+    spinner.start("initializing git repository and committing");
+    await exec("git init", { stdio: "ignore", cwd: projectPath });
+    await exec("git add .", { stdio: "ignore", cwd: projectPath });
+    await exec('git commit -m "initial commit"', {
+      stdio: "ignore",
       cwd: projectPath,
     });
     spinner.succeed();
   } catch (error) {
     spinner.fail();
-    throw new Error(
-      `failed to restart git repository (${(error as Error).message})`,
-    );
+    throw new Error(`failed to restart git repository (${(error as Error).message})`);
   }
 }
 
 async function rollbackChanges(projectPath: string): Promise<void> {
   let needsRollback = false;
 
-  if (projectPath !== ``) {
+  if (projectPath !== "") {
     try {
       await access(projectPath);
       needsRollback = true;
@@ -156,7 +148,7 @@ async function rollbackChanges(projectPath: string): Promise<void> {
 
   if (needsRollback) {
     try {
-      spinner.start(`rolling back changes`);
+      spinner.start("rolling back changes");
       await rm(projectPath, { recursive: true, force: true });
       spinner.succeed();
     } catch (error) {
@@ -170,11 +162,11 @@ async function rollbackChanges(projectPath: string): Promise<void> {
 }
 
 function handleError(error: unknown, projectPath: string): void {
-  const preMessage = chalk.redBright.bold(`an error occurred:`);
+  const preMessage = chalk.redBright.bold("an error occurred:");
   let message = (error as Error).message;
 
   if (error instanceof ExitPromptError) {
-    message = `user interrupted`;
+    message = "user interrupted";
   }
 
   // eslint-disable-next-line no-console
@@ -187,7 +179,7 @@ function handleError(error: unknown, projectPath: string): void {
     })
     .catch(() => {
       // eslint-disable-next-line no-console
-      console.log(`failed to roll back changes`);
+      console.log("failed to roll back changes");
     });
 }
 
