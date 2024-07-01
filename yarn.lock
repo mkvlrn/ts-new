@@ -925,9 +925,9 @@
   integrity sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==
 
 "@swc/plugin-transform-imports@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-2.0.6.tgz#8c6bb4d960360447e32b94eaf4786db231d09089"
-  integrity sha512-hIQAQoAxNUYfKMzJ1e13eSUeGINv/5W5AtoFAcRwktLjQy1Fzyjt4LmvGPk1I4WSe0EEvzNiDvotC54Sj3WiBA==
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-2.0.7.tgz#d2d830e1f68f404b61b5e7346f81dc3e51541bb4"
+  integrity sha512-2bfiOmhCYiQPQKUnl1/TRRIcANBNAsBbAP4L7+AhpDYntEaBzJg2NWlWF2skapPONKNA6p201PSXWgvlCWqAPQ==
   dependencies:
     "@swc/counter" "^0.1.3"
 
