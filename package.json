@@ -40,7 +40,7 @@
     "@commitlint/config-conventional": "^19.2.2",
     "@mkvlrn/eslint-config": "^24.7.2",
     "@mkvlrn/prettier-config": "^24.6.7",
-    "@swc-node/register": "1.10.4",
+    "@swc-node/register": "1.10.7",
     "@swc/cli": "^0.4.0",
     "@swc/core": "^1.6.13",
     "@swc/plugin-transform-imports": "^2.0.9",
